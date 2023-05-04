@@ -1,4 +1,4 @@
-#Darknet
+# Darknet
 
 This repository holds my HTML site for the public.
 
@@ -6,6 +6,7 @@ This repository holds my HTML site for the public.
 
 
 #info
+
 The following site has been completely written and maintained by yours truly (XYN0N - Macs).
 
 | My Telegram: https://t.me/SwirlingGalaxy
