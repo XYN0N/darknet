@@ -1,0 +1,107 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>Earth With Space Background</title>
+      <style>
+         body { margin: 0; }
+      </style>
+   </head>
+   <body>
+      <script src="three.min.js"></script>
+      <script src="OrbitControls.js"></script>
+      <script>
+         const scene = new THREE.Scene();
+         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+         camera.position.set(0, 0, 50);
+         camera.lookAt(0, 0, 0);
+
+         const renderer = new THREE.WebGLRenderer();
+         renderer.setSize(window.innerWidth, window.innerHeight);
+         document.body.appendChild(renderer.domElement);
+
+         const geometry2 = new THREE.SphereGeometry(500, 32, 16);
+         const texture2 = new THREE.TextureLoader().load('https://i.imgur.com/uwRXcQB.jpeg', function (texture) {
+         texture.magFilter = THREE.LinearFilter; // Imposta il filtro di ingrandimento su LinearFilter
+         texture.minFilter = THREE.LinearFilter; // Imposta il filtro di riduzione su LinearFilter
+});
+         const material2 = new THREE.MeshBasicMaterial({ map: texture2 });
+
+
+         const sphere2 = new THREE.Mesh(geometry2, material2);
+         scene.add(sphere2);
+
+         const geometry = new THREE.SphereGeometry(15, 32, 16);
+         const texture = new THREE.TextureLoader().load('https://i.imgur.com/kFoWvzw.jpg');
+         const material = new THREE.MeshPhongMaterial({ map: texture });
+         const sphere = new THREE.Mesh(geometry, material);
+         const controls = new THREE.OrbitControls(camera, renderer.domElement);
+		 controls.minDistance = 10; // Imposta la distanza minima di zoom
+         controls.maxDistance = 420; // Imposta la distanza massima di zoom
+		 controls.maxPolarAngle = Math.PI / 0.4; // Imposta l'angolo massimo di inclinazione verticale
+		 controls.maxAzimuthAngle = Math.PI / 0.5; // Imposta l'angolo massimo di rotazione orizzontale
+		 
+
+         scene.add(sphere);
+
+         const geometry3 = new THREE.SphereGeometry(3, 32, 16);
+         const texture3 = new THREE.TextureLoader().load('https://i.imgur.com/Qx7MiIw.jpeg');
+         const material3 = new THREE.MeshPhongMaterial({ map: texture3 });
+         const sphere3 = new THREE.Mesh(geometry3, material3);
+         scene.add(sphere3);
+         sphere3.position.set(35, 10, -50);
+
+         function animate3() {
+            requestAnimationFrame(animate3);
+            sphere3.rotation.x += 0.00;
+            sphere3.rotation.y += 0.01;
+            renderer.render(scene, camera);
+         }
+         animate3();
+
+         const geometry4 = new THREE.SphereGeometry(9, 30, 13);
+         const texture4 = new THREE.TextureLoader().load('https://i.imgur.com/ZchDPxR.jpeg');
+         const material4 = new THREE.MeshBasicMaterial({ map: texture4 });
+         const sphere4 = new THREE.Mesh(geometry4, material4);
+         scene.add(sphere4);
+         sphere4.position.set(0, 55, 335);
+         function animate4() {
+            requestAnimationFrame(animate4);
+            sphere4.rotation.x += 0.00;
+            sphere4.rotation.y += 0.002;
+            renderer.render(scene, camera);
+         }
+         animate4();
+
+         const geometry5 = new THREE.SphereGeometry(7, 30, 13);
+         const texture5 = new THREE.TextureLoader().load('https://i.imgur.com/ctWFMhD.jpg');
+         const material5 = new THREE.MeshBasicMaterial({ map: texture5 });
+         const sphere5 = new THREE.Mesh(geometry5, material5);
+         scene.add(sphere5);
+         sphere5.position.set(37, 51, 335);
+         function animate1() {            
+		    requestAnimationFrame(animate1);
+            sphere5.rotation.x += 0.003;
+            sphere5.rotation.y += 0.004;
+            renderer.render(scene, camera);
+         }
+         animate1();
+
+         const light = new THREE.PointLight(0xffffff, 1, 1000, 2);
+         light.position.set(0, 0, 100);
+         scene.add(light);
+
+         material2.side = THREE.BackSide;
+
+         controls.update();
+
+         function animate() {
+            requestAnimationFrame(animate);
+            sphere.rotation.x += 0.00;
+            sphere.rotation.y += 0.004;
+            renderer.render(scene, camera);
+         }
+         animate();
+      </script>
+   </body>
+</html>
+
