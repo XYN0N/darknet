@@ -10,4 +10,5 @@ This repository holds my HTML site for the public.
 | My Telegram: https://t.me/SwirlingGalaxy
 
 | My Instagram: Mvcse
+
 The following site has been completely written and maintained by yours truly (XYN0N - Macs).
