@@ -1,12 +1,10 @@
 
-<!DOCTYPE html>
 <html>
 
-<head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dark/style.css">
 </head>
 
  
@@ -18,18 +16,7 @@
 
 
 
-function randomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min
-}
 
-const STAR_COUNT = 400
-let result = ""
-for(let i = 0; i < STAR_COUNT; i++){
-    result += `${randomNumber(-50, 50)}vw ${randomNumber(-50, 50)}vh ${randomNumber(0, 1)}px ${randomNumber(0, 1)}px #fff,`
-}
-console.log(result.substring(0, result.length - 1))
-
-<link rel="stylesheet" type="text/css" href="dark/style.css">
 
 
 	<title>Abzu</title>
@@ -37,14 +24,14 @@ console.log(result.substring(0, result.length - 1))
 </head>
 <body>
 	<header>
-		<h1>Trascendental Abyss</h1>
+		<center><h1> <font color="cyan">Trascendental Abyss</h1></center>
 		<img src="dark/eye.png" alt="eye">
 	</header>
 	<main>
 		<section id="science">
-			<h2>  <font color="Blue">4K <font color="yellow">UHD</h2>
+			<h2>  <font color="Blue">DEEP <font color="yellow">FIELD</h2>
 			<p> <font color="blue">James webb</p>
-			<img src="dark/jwebb.jpg" alt="James Webb Deep Field Image">
+			<img src="dark/jwebb.png" alt="James Webb Deep Field Image">
 			<p> <font color="Yellow">Hubble</p>
 			<img src="dark/hubble.jpg" alt="Hubble Deep Field Image">
 		</section>
