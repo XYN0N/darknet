@@ -1,0 +1,23 @@
+.main-margin1{
+  
+ float:none;
+  margin: 0 auto;
+}
+
+h1
+{
+  font-size:60px;
+}
+.im-cont{
+  background-color:white;
+  padding: 5px 5px 20px 5px;
+ 
+}
+.col-center{
+  float:none;
+  margin: 0 auto;
+}
+.im-cont img {
+  max-width: 100%;
+  height: auto;
+}
