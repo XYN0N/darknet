@@ -4,7 +4,7 @@ window.onload = function(){
     const particles = []; // an array to keep track of each particle
     const colors = ["blue", "green",  "orange", "red", "white", "#4488FF", "yellow"];
     const timeToStart = (10); // seconds till the simulation will start
-    const restartTime = 20; // seconds to restart the simulation
+    const restartTime = 7; // seconds to restart the simulation
     let countToStart = 0;
     let startTime = Date.now(); // initialize start time
 
@@ -37,7 +37,7 @@ window.onload = function(){
         if (timeElapsed > restartTime) { // restart simulation
             startTime = Date.now(); // update start time
             particles.length = 0; // clear particles array
-            createParticles(4000); // create new particles
+            createParticles(400); // create new particles
         } else if (countToStart > timeToStart) {
             particles.forEach(p => {
                 p.x += p.vel.x * p.speed;
@@ -47,18 +47,18 @@ window.onload = function(){
         countToStart++;
     };
 
-    // draw each particle as a Rectangle (Circle would be nice too)
+    // draw each particle as a mini galaxy
     const draw = function() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         particles.forEach(p => {
             context.beginPath();
-            context.arc(p.x,p.y,3,0,2 * Math.PI);
-            context.fillStyle = p.color;
+            let gradient = context.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+            gradient.addColorStop(0, p.color);
+            gradient.addColorStop(1, "black");
+            context.fillStyle = gradient;
+            context.arc(p.x,p.y, p.size, 0, 2 * Math.PI);
             context.fill();
-            context.lineWidth = 1;
-            context.strokeStyle = '#003300';
-            context.stroke();
         });
     };
 
@@ -68,7 +68,7 @@ window.onload = function(){
         requestAnimationFrame(tick);
     };
 
-    createParticles(4000); // pass the number of particles
+    createParticles(400); // pass the number of particles
 
     tick();
 };
