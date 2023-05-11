@@ -6,7 +6,7 @@ body {
 canvas {
   position: absolute;
   display:block;
-  background: #000 url('https://image.ibb.co/mjnygo/stars.png') repeat top center;
+  background: #000 url("") repeat top center;
 }
 
 /*_______*/
