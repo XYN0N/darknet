@@ -52,6 +52,7 @@
     <div class="user-list" id="userList"></div>
     <div class="input-box">
         <input type="text" id="usernameInput" placeholder="Username">
+        <input type="text" id="roomInput" placeholder="Room">
         <input type="text" id="messageInput" placeholder="Type your message..." disabled>
         <input type="submit" value="Login" onclick="login()">
         <input type="submit" id="sendButton" value="Send" onclick="sendMessage()" disabled>
@@ -60,6 +61,7 @@
     <script>
         var loggedIn = false;
         var username;
+        var room;
         var userCount = 0;
         var messages = [];
 
@@ -68,7 +70,9 @@
             if (localStorage.getItem('loggedIn') === 'true') {
                 loggedIn = true;
                 username = localStorage.getItem('username');
+                room = localStorage.getItem('room');
                 document.getElementById('usernameInput').value = username;
+                document.getElementById('roomInput').value = room;
                 document.getElementById('messageInput').removeAttribute('disabled');
                 document.getElementById('sendButton').removeAttribute('disabled');
                 updateUsersList();
@@ -78,16 +82,20 @@
 
         function login() {
             var usernameInput = document.getElementById('usernameInput');
+            var roomInput = document.getElementById('roomInput');
             var messageInput = document.getElementById('messageInput');
 
-            if (!loggedIn && usernameInput.value.trim() !== '') {
+            if (!loggedIn && usernameInput.value.trim() !== '' && roomInput.value.trim() !== '') {
                 username = usernameInput.value.trim();
+                room = roomInput.value.trim();
                 usernameInput.value = username;
+                roomInput.value = room;
                 loggedIn = true;
 
                 // Salva lo stato di accesso nell'archiviazione locale
                 localStorage.setItem('loggedIn', 'true');
                 localStorage.setItem('username', username);
+                localStorage.setItem('room', room);
 
                 messageInput.removeAttribute('disabled');
                 document.getElementById('sendButton').removeAttribute('disabled');
@@ -95,7 +103,7 @@
                 var chatbox = document.getElementById('chatbox');
                 var loginMessage = document.createElement('div');
                 loginMessage.className = 'message';
-                loginMessage.textContent = username + ' has joined.';
+                loginMessage.textContent = username + ' has joined the room ' + room + '.';
                 chatbox.appendChild(loginMessage);
                 chatbox.scrollTop = chatbox.scrollHeight;
 
@@ -115,6 +123,7 @@
                 userList.appendChild(listItem);
             }
         }
+
         function getUsers() {
             var users = [];
 
@@ -171,4 +180,3 @@
 
 </body>
 </html>
-
