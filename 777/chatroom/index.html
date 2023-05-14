@@ -57,117 +57,118 @@
         <input type="submit" id="sendButton" value="Send" onclick="sendMessage()" disabled>
     </div>
 
-<script>
-    var loggedIn = false;
-    var username;
-    var userCount = 0;
-    var messages = [];
+    <script>
+        var loggedIn = false;
+        var username;
+        var userCount = 0;
+        var messages = [];
 
-    // Ripristina gli utenti e i messaggi salvati al caricamento della pagina
-    document.addEventListener('DOMContentLoaded', function() {
-        if (localStorage.getItem('loggedIn') === 'true') {
-            loggedIn = true;
-            username = localStorage.getItem('username');
-            document.getElementById('usernameInput').value = username;
-            document.getElementById('messageInput').removeAttribute('disabled');
-            document.getElementById('sendButton').removeAttribute('disabled');
-            updateUsersList();
-            displayMessages();
-        }
-    });
+        // Ripristina gli utenti e i messaggi salvati al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('loggedIn') === 'true') {
+                loggedIn = true;
+                username = localStorage.getItem('username');
+                document.getElementById('usernameInput').value = username;
+                document.getElementById('messageInput').removeAttribute('disabled');
+                document.getElementById('sendButton').removeAttribute('disabled');
+                updateUsersList();
+                displayMessages();
+            }
+        });
 
-    function login() {
-        var usernameInput = document.getElementById("usernameInput");
-        var messageInput = document.getElementById("messageInput");
+        function login() {
+            var usernameInput = document.getElementById('usernameInput');
+            var messageInput = document.getElementById('messageInput');
 
-        if (!loggedIn && usernameInput.value.trim() !== "") {
-            username = usernameInput.value.trim();
-            usernameInput.value = username;
-            loggedIn = true;
+            if (!loggedIn && usernameInput.value.trim() !== '') {
+                username = usernameInput.value.trim();
+                usernameInput.value = username;
+                loggedIn = true;
 
-            // Salva lo stato di accesso nell'archiviazione locale
-            localStorage.setItem('loggedIn', 'true');
-            localStorage.setItem('username', username);
+                // Salva lo stato di accesso nell'archiviazione locale
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('username', username);
 
-            messageInput.removeAttribute("disabled");
-            document.getElementById("sendButton").removeAttribute("disabled");
+                messageInput.removeAttribute('disabled');
+                document.getElementById('sendButton').removeAttribute('disabled');
 
-            var chatbox = document.getElementById("chatbox");
-            var loginMessage = document.createElement("div");
-            loginMessage.className = "message";
-            loginMessage.textContent = username + " has joined.";
-            chatbox.appendChild(loginMessage);
-            chatbox.scrollTop = chatbox.scrollHeight;
+                var chatbox = document.getElementById('chatbox');
+                var loginMessage = document.createElement('div');
+                loginMessage.className = 'message';
+                loginMessage.textContent = username + ' has joined.';
+                chatbox.appendChild(loginMessage);
+                chatbox.scrollTop = chatbox.scrollHeight;
 
-            updateUsersList();
-        }
-    }
-
-    function updateUsersList() {
-        var userList = document.getElementById("userList");
-        userList.innerHTML = "";
-
-        var users = getUsers();
-        for (var i = 0; i < users.length; i++) {
-            var listItem = document.createElement("li");
-            listItem.className = "user-list-item";
-            listItem.textContent = users[i];
-            userList.appendChild(listItem);
-        }
-    }
-
-    function getUsers() {
-        var users = [];
-
-        var userList = document.getElementsByClassName("user-list-item");
-        for (var i = 0; i < userList.length; i++) {
-            users.push(userList[i].textContent);
-        }
-
-        return users;
-    }
-
-    function sendMessage() {
-        var messageInput = document.getElementById("messageInput");
-        var message = messageInput.value.trim();
-
-        if (message !== "") {
-            var chatbox = document.getElementById("chatbox");
-            var newMessage = document.createElement("div");
-            newMessage.className = "message";
-            newMessage.textContent = username + ": " + message;
-            chatbox.appendChild(newMessage);
-            messageInput.value = "";
-            chatbox.scrollTop = chatbox.scrollHeight;
-
-            saveMessage(username, message);
-        }
-    }
-
-    function saveMessage(username, message) {
-        messages.push({ username: username, message: message });
-        // Salva i messaggi nell'archiviazione locale
-        localStorage.setItem('messages', JSON.stringify(messages));
-    }
-
-    function displayMessages() {
-        var chatbox = document.getElementById("chatbox");
-        chatbox.innerHTML = "";
-
-        var storedMessages = localStorage.getItem('messages');
-        if (storedMessages) {
-            messages = JSON.parse(storedMessages);
-            for (var i = 0; i < messages.length; i++) {
-                var message = messages[i];
-                var messageElement = document.createElement("div");
-                messageElement.className = "message";
-                messageElement.textContent = message.username + ": " + message.message;
-                chatbox.appendChild(messageElement);
+                updateUsersList();
             }
         }
 
-        chatbox.scrollTop = chatbox.scrollHeight;
-    }
-</script>
+        function updateUsersList() {
+            var userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            var users = getUsers();
+            for (var i = 0; i < users.length; i++) {
+                var listItem = document.createElement('li');
+                listItem.className = 'user-list-item';
+                listItem.textContent = users[i];
+                userList.appendChild(listItem);
+            }
+        }
+        function getUsers() {
+            var users = [];
+
+            var userList = document.getElementsByClassName('user-list-item');
+            for (var i = 0; i < userList.length; i++) {
+                users.push(userList[i].textContent);
+            }
+
+            return users;
+        }
+
+        function sendMessage() {
+            var messageInput = document.getElementById('messageInput');
+            var message = messageInput.value.trim();
+
+            if (message !== '') {
+                var chatbox = document.getElementById('chatbox');
+                var newMessage = document.createElement('div');
+                newMessage.className = 'message';
+                newMessage.textContent = username + ': ' + message;
+                chatbox.appendChild(newMessage);
+                messageInput.value = '';
+                chatbox.scrollTop = chatbox.scrollHeight;
+
+                saveMessage(username, message);
+            }
+        }
+
+        function saveMessage(username, message) {
+            messages.push({ username: username, message: message });
+            // Salva i messaggi nell'archiviazione locale
+            localStorage.setItem('messages', JSON.stringify(messages));
+        }
+
+        function displayMessages() {
+            var chatbox = document.getElementById('chatbox');
+            chatbox.innerHTML = '';
+
+            var storedMessages = localStorage.getItem('messages');
+            if (storedMessages) {
+                messages = JSON.parse(storedMessages);
+                for (var i = 0; i < messages.length; i++) {
+                    var message = messages[i];
+                    var messageElement = document.createElement('div');
+                    messageElement.className = 'message';
+                    messageElement.textContent = message.username + ': ' + message.message;
+                    chatbox.appendChild(messageElement);
+                }
+            }
+
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+    </script>
 
 </body>
+</html>
+
