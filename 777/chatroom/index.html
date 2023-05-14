@@ -1,182 +1,241 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatroom</title>
+    <title>Chatbot Room</title>
     <style>
-        .chatbox {
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             width: 400px;
-            height: 300px;
+            height: 500px;
             border: 1px solid #ccc;
+            background-color: black;
+            color: white;
             overflow-y: scroll;
+            padding: 10px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: cyan;
+            margin-bottom: 10px;
+        }
+
+        .chat-header span {
+            margin-left: 5px;
+        }
+
+        .chat {
+            display: flex;
+            flex-direction: column;
+            color: white;
         }
 
         .message {
-            padding: 10px;
-            background-color: #f2f2f2;
             margin-bottom: 5px;
-        }
-
-        .input-box {
-            display: flex;
-            margin-top: 10px;
-        }
-
-        .input-box input[type="text"] {
-            flex-grow: 1;
             padding: 5px;
         }
 
-        .input-box input[type="submit"] {
-            padding: 5px 10px;
-            background-color: #4CAF50;
+        .message.user {
+            background-color: black;
             color: white;
-            border: none;
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            background-color: black;
+            color: white;
+            align-self: flex-start;
+        }
+
+        .message.error {
+            background-color: red;
+        }
+
+        .online {
+            color: green;
+            margin-left: 5px;
+        }
+
+        .divider {
+            border-top: 1px solid red;
+            margin: 10px 0;
+        }
+
+        .bot-name {
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .bot-name.bot-name-text {
+            color: cyan;
+        }
+
+        .bot-logo-container {
+            display: flex;
+            align-items: center;
             cursor: pointer;
+            transition: width 0.3s, height 0.3s;
         }
 
-        .user-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            width: 100px;
-            float: right;
+        .bot-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
-        .user-list-item {
-            margin-bottom: 5px;
+        .enlarged {
+            width: 80px;
+            height: 80px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .input-container input[type="text"] {
+            margin-right: 5px;
         }
     </style>
 </head>
+
 <body>
-    <div class="chatbox" id="chatbox"></div>
-    <div class="user-list" id="userList"></div>
-    <div class="input-box">
-        <input type="text" id="usernameInput" placeholder="Username">
-        <input type="text" id="roomInput" placeholder="Room">
-        <input type="text" id="messageInput" placeholder="Type your message..." disabled>
-        <input type="submit" value="Login" onclick="login()">
-        <input type="submit" id="sendButton" value="Send" onclick="sendMessage()" disabled>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="bot-logo-container" onclick="toggleLogoSize()">
+                <img src="logo.jpg" alt="Bot Logo" class="bot-logo">
+            </div>
+            <span class="bot-name">Galaxy Bot</span><span class="online">(Online)</span>
+        </div>
+        <div id="chat" class="chat"></div>
+        <div class="input-container">
+            <input type="text" id="inputMessage" />
+            <input type="submit" value="Invia" onclick="sendMessage()" />
+        </div>
     </div>
 
     <script>
-        var loggedIn = false;
-        var username;
-        var room;
-        var userCount = 0;
-        var messages = [];
-
-        // Ripristina gli utenti e i messaggi salvati al caricamento della pagina
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('loggedIn') === 'true') {
-                loggedIn = true;
-                username = localStorage.getItem('username');
-                room = localStorage.getItem('room');
-                document.getElementById('usernameInput').value = username;
-                document.getElementById('roomInput').value = room;
-                document.getElementById('messageInput').removeAttribute('disabled');
-                document.getElementById('sendButton').removeAttribute('disabled');
-                updateUsersList();
-                displayMessages();
-            }
-        });
-
-        function login() {
-            var usernameInput = document.getElementById('usernameInput');
-            var roomInput = document.getElementById('roomInput');
-            var messageInput = document.getElementById('messageInput');
-
-            if (!loggedIn && usernameInput.value.trim() !== '' && roomInput.value.trim() !== '') {
-                username = usernameInput.value.trim();
-                room = roomInput.value.trim();
-                usernameInput.value = username;
-                roomInput.value = room;
-                loggedIn = true;
-
-                // Salva lo stato di accesso nell'archiviazione locale
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('username', username);
-                localStorage.setItem('room', room);
-
-                messageInput.removeAttribute('disabled');
-                document.getElementById('sendButton').removeAttribute('disabled');
-
-                var chatbox = document.getElementById('chatbox');
-                var loginMessage = document.createElement('div');
-                loginMessage.className = 'message';
-                loginMessage.textContent = username + ' has joined the room ' + room + '.';
-                chatbox.appendChild(loginMessage);
-                chatbox.scrollTop = chatbox.scrollHeight;
-
-                updateUsersList();
-            }
+        function toggleLogoSize() {
+            var logoContainer = document.querySelector('.bot-logo-container');
+            logoContainer.classList.toggle('enlarged');
         }
+function sendMessage() {
+    var input = document.getElementById("inputMessage").value;
+    var chat = document.getElementById("chat");
 
-        function updateUsersList() {
-            var userList = document.getElementById('userList');
-            userList.innerHTML = '';
+    var messageElement = document.createElement("div");
+    messageElement.className = "message user";
+    messageElement.textContent = "User: " + input;
 
-            var users = getUsers();
-            for (var i = 0; i < users.length; i++) {
-                var listItem = document.createElement('li');
-                listItem.className = 'user-list-item';
-                listItem.textContent = users[i];
-                userList.appendChild(listItem);
-            }
+    var dividerElement = document.createElement("div");
+
+    if (input.startsWith("/")) {
+        var command = input.substr(1);
+        var validCommand = handleCommand(command, chat, messageElement, dividerElement);
+
+        if (!validCommand) {
+            chat.removeChild(messageElement); // Rimuovi solo il messaggio dell'utente
         }
+    } else {
+        var errorMessage = document.createElement("div");
+        errorMessage.className = "message bot error";
+        errorMessage.innerHTML =
+            '<span class="bot-name bot-name-text">Galaxy Bot:</span> Comando non valido. Riprova.';
+        chat.appendChild(errorMessage);
+        chat.appendChild(dividerElement);
 
-        function getUsers() {
-            var users = [];
+        setTimeout(function () {
+            chat.removeChild(errorMessage);
+            chat.removeChild(dividerElement);
+            chat.removeChild(messageElement);
+        }, 7000);
+    }
 
-            var userList = document.getElementsByClassName('user-list-item');
-            for (var i = 0; i < userList.length; i++) {
-                users.push(userList[i].textContent);
-            }
+    // Scrolla automaticamente alla fine del contenuto
+    chat.scrollTop = chat.scrollHeight;
+}
 
-            return users;
-        }
 
-        function sendMessage() {
-            var messageInput = document.getElementById('messageInput');
-            var message = messageInput.value.trim();
+        function handleCommand(command, chat, messageElement, dividerElement) {
+            if (command === "info") {
+                var infoMessage = document.createElement("div");
+                infoMessage.className = "message bot";
+                infoMessage.innerHTML =
+                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> Versione: 1.0.0, Owner: XYN0N aka ';
+                var linkElement = document.createElement("a");
+                linkElement.href = "https://t.me/swirlinggalaxy";
+                linkElement.textContent = "macs";
+                infoMessage.appendChild(linkElement);
+                chat.appendChild(dividerElement);
+                chat.appendChild(infoMessage);
+                chat.scrollTop = chat.scrollHeight;
+            } else if (command === "help") {
+                var helpMessage = document.createElement("div");
+                helpMessage.className = "message bot";
+                helpMessage.innerHTML =
+                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> I comandi disponibili sono /info, /help, /time, /ping.';
+                chat.appendChild(dividerElement);
+                chat.appendChild(helpMessage);
+                chat.scrollTop = chat.scrollHeight;
+            } else if (command === "ping") {
+                var pingMessage = document.createElement("div");
+                pingMessage.className = "message bot";
+                pingMessage.innerHTML = '<span class="bot-name bot-name-text">Galaxy Bot:</span> Pong!';
+                chat.appendChild(dividerElement);
+                chat.appendChild(pingMessage);
+                chat.scrollTop = chat.scrollHeight;
+            } else if (command === "time") {
+                getTimeInfo(chat, dividerElement);
+            } else {
+                var errorMessage = document.createElement("div");
+                errorMessage.className = "message bot error";
+                errorMessage.innerHTML =
+                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> Comando non valido. Riprova.';
+                chat.appendChild(errorMessage);
+                chat.appendChild(dividerElement);
 
-            if (message !== '') {
-                var chatbox = document.getElementById('chatbox');
-                var newMessage = document.createElement('div');
-                newMessage.className = 'message';
-                newMessage.textContent = username + ': ' + message;
-                chatbox.appendChild(newMessage);
-                messageInput.value = '';
-                chatbox.scrollTop = chatbox.scrollHeight;
+                setTimeout(function () {
+            chat.removeChild(errorMessage);
+            chat.removeChild(dividerElement);
+            chat.removeChild(messageElement);
+        }, 7000);
+        return false; // Indica che il comando non è valido
+    }
 
-                saveMessage(username, message);
-            }
-        }
+    return true; // Indica che il comando è stato gestito correttamente
+}
 
-        function saveMessage(username, message) {
-            messages.push({ username: username, message: message });
-            // Salva i messaggi nell'archiviazione locale
-            localStorage.setItem('messages', JSON.stringify(messages));
-        }
+ function getTimeInfo(chat, dividerElement) {
+           var options = { timeZone: "Europe/Rome", hour: "numeric", minute: "numeric" };
+            var time = new Date().toLocaleString("en-US", options);
 
-        function displayMessages() {
-            var chatbox = document.getElementById('chatbox');
-            chatbox.innerHTML = '';
-
-            var storedMessages = localStorage.getItem('messages');
-            if (storedMessages) {
-                messages = JSON.parse(storedMessages);
-                for (var i = 0; i < messages.length; i++) {
-                    var message = messages[i];
-                    var messageElement = document.createElement('div');
-                    messageElement.className = 'message';
-                    messageElement.textContent = message.username + ': ' + message.message;
-                    chatbox.appendChild(messageElement);
-                }
-            }
-
-            chatbox.scrollTop = chatbox.scrollHeight;
+            var timeMessage = document.createElement("div");
+            timeMessage.className = "message bot";
+            timeMessage.innerHTML =
+                '<span class="bot-name bot-name-text">Galaxy Bot:</span> Ora corrente: ' + time;
+            chat.appendChild(dividerElement);
+            chat.appendChild(timeMessage);
+            chat.scrollTop = chat.scrollHeight;
         }
     </script>
-
 </body>
 </html>
