@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatroom</title>
+    <style>
+        .chatbox {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+        }
+
+        .message {
+            padding: 10px;
+            background-color: #f2f2f2;
+            margin-bottom: 5px;
+        }
+
+        .input-box {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .input-box input[type="text"] {
+            flex-grow: 1;
+            padding: 5px;
+        }
+
+        .input-box input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            width: 100px;
+            float: right;
+        }
+
+        .user-list-item {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox" id="chatbox"></div>
+    <div class="user-list" id="userList"></div>
+    <div class="input-box">
+        <input type="text" id="usernameInput" placeholder="Username">
+        <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+        <input type="submit" value="Login" onclick="login()">
+        <input type="submit" value="Send" onclick="sendMessage()" disabled>
+    </div>
+
+    <script>
+        var loggedIn = false;
+        var username;
+        var userCount = 0;
+
+        function login() {
+            var usernameInput = document.getElementById("usernameInput");
+            var messageInput = document.getElementById("messageInput");
+
+            if (!loggedIn && usernameInput.value.trim() !== "") {
+                username = usernameInput.value.trim();
+                usernameInput.value = username;
+                loggedIn = true;
+
+                messageInput.removeAttribute("disabled");
+                document.getElementById("messageButton").removeAttribute("disabled");
+
+                var chatbox = document.getElementById("chatbox");
+                var loginMessage = document.createElement("div");
+                loginMessage.className = "message";
+                loginMessage.textContent = username + " has joined.";
+                chatbox.appendChild(loginMessage);
+                chatbox.scrollTop = chatbox.scrollHeight;
+
+                updateUsersList();
+            }
+        }
+
+        function updateUsersList() {
+            var userList = document.getElementById("userList");
+            userList.innerHTML = "";
+
+            var users = getUsers();
+            for (var i = 0; i < users.length; i++) {
+                var listItem = document.createElement("li");
+                listItem.className = "user-list-item";
+                listItem.textContent = users[i];
+                userList.appendChild(listItem);
+            }
+        }
+
+       function getUsers() {
+    var users = [];
+
+    var userList = document.getElementsByClassName("user-list-item");
+    for (var i = 0; i < userList.length; i++) {
+        users.push(userList[i].textContent);
+    }
+
+    return users;
+}
+
+function sendMessage() {
+    var messageInput = document.getElementById("messageInput");
+    var message = messageInput.value.trim();
+
+    if (message !== "") {
+        var chatbox = document.getElementById("chatbox");
+        var newMessage = document.createElement("div");
+        newMessage.className = "message";
+        newMessage.textContent = message;
+        chatbox.appendChild(newMessage);
+        messageInput.value = "";
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+}
+</script>
+</body>
+</html>
