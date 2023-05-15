@@ -115,16 +115,43 @@
         .input-container input[type="text"] {
             margin-right: 5px;
         }
+
+.welcome-box {
+  width: 54%;
+  height: 50px;
+  background-color: black;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-text {
+  position: absolute;
+  color: lime;
+  font-size: 16px;
+  white-space: nowrap;
+  animation: moveText 10s linear infinite;
+}
+
+@keyframes moveText {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -120%;
+  }
+}
     </style>
 </head>
-
+<div class="welcome-box">
+  <p class="welcome-text">Ciao! io sono @GalaxyBot 🤖 per vedere i miei comandi digita /help.</p>
+</div>
 <body>
     <div class="chat-container">
         <div class="chat-header">
             <div class="bot-logo-container" onclick="toggleLogoSize()">
                 <img src="logo.jpg" alt="Bot Logo" class="bot-logo">
             </div>
-            <span class="bot-name">Galaxy Bot</span><span class="online">(Online)</span>
+            <span class="bot-name">@GalaxyBot</span><span class="online">(Online)</span>
         </div>
         <div id="chat" class="chat"></div>
         <div class="input-container">
@@ -159,7 +186,7 @@ function sendMessage() {
         var errorMessage = document.createElement("div");
         errorMessage.className = "message bot error";
         errorMessage.innerHTML =
-            '<span class="bot-name bot-name-text">Galaxy Bot:</span> Comando non valido. Riprova.';
+            '<span class="bot-name bot-name-text">@GalaxyBot:</span> Comando non valido. Riprova.';
         chat.appendChild(errorMessage);
         chat.appendChild(dividerElement);
 
@@ -180,7 +207,7 @@ function sendMessage() {
                 var infoMessage = document.createElement("div");
                 infoMessage.className = "message bot";
                 infoMessage.innerHTML =
-                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> Versione: 1.0.0, Owner: XYN0N aka ';
+                    '<span class="bot-name bot-name-text">@GalaxyBot:</span> Versione: 1.0.0, Owner: XYN0N aka ';
                 var linkElement = document.createElement("a");
                 linkElement.href = "https://t.me/swirlinggalaxy";
                 linkElement.textContent = "macs";
@@ -192,14 +219,14 @@ function sendMessage() {
                 var helpMessage = document.createElement("div");
                 helpMessage.className = "message bot";
                 helpMessage.innerHTML =
-                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> I comandi disponibili sono /info, /help, /time, /ping.';
+                    '<span class="bot-name bot-name-text">@GalaxyBot:</span> I comandi disponibili sono /info, /help, /time, /ping.';
                 chat.appendChild(dividerElement);
                 chat.appendChild(helpMessage);
                 chat.scrollTop = chat.scrollHeight;
             } else if (command === "ping") {
                 var pingMessage = document.createElement("div");
                 pingMessage.className = "message bot";
-                pingMessage.innerHTML = '<span class="bot-name bot-name-text">Galaxy Bot:</span> Pong!';
+                pingMessage.innerHTML = '<span class="bot-name bot-name-text">@GalaxyBot:</span> Pong!';
                 chat.appendChild(dividerElement);
                 chat.appendChild(pingMessage);
                 chat.scrollTop = chat.scrollHeight;
@@ -209,7 +236,7 @@ function sendMessage() {
                 var errorMessage = document.createElement("div");
                 errorMessage.className = "message bot error";
                 errorMessage.innerHTML =
-                    '<span class="bot-name bot-name-text">Galaxy Bot:</span> Comando non valido. Riprova.';
+                    '<span class="bot-name bot-name-text">@GalaxyBot:</span> Comando non valido. Riprova.';
                 chat.appendChild(errorMessage);
                 chat.appendChild(dividerElement);
 
@@ -231,7 +258,7 @@ function sendMessage() {
             var timeMessage = document.createElement("div");
             timeMessage.className = "message bot";
             timeMessage.innerHTML =
-                '<span class="bot-name bot-name-text">Galaxy Bot:</span> Ora corrente: ' + time;
+                '<span class="bot-name bot-name-text">@GalaxyBot:</span> Ora corrente: ' + time;
             chat.appendChild(dividerElement);
             chat.appendChild(timeMessage);
             chat.scrollTop = chat.scrollHeight;
