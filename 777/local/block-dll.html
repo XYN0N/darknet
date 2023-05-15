@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>dll blocker</title>
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="highlight/windows-95.min.css">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        <script src="highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <div class="phead">
+            Patching DLL entry points to bypass AVs/EDRs hooks
+        </div>
+        <div class="pindex">
+            Many AV/EDR solutions at least partialy rely on user-mode API hooking in order to detect malicious behavior in real-time.
+            <br>This API hooking is usually done by injecting a DLL into user processes, which allows the product (AV/EDR) to monitor suspicious activity during runtime.
+            <br>I've tested this technique against many products, including Avast, Comodo, McAfee and F-Secure just to name a few. So let's pick Avast as our target for this demo.
+            <br>Using <a target="_blank" style="color: rgb(0, 255, 0);" href="https://learn.microsoft.com/en-us/sysinternals/">Sysinternals' Process Explorer</a>, we can inspect separate processes to see what DLLs have been loaded into them.
+            <br>The process of interest will be <b>Dummy.exe</b>:
+        </div>
+        <pre><code>#include &lt;stdio.h>
+#include &lt;Windows.h>
+
+int main(void) {
+
+    printf("[+] PID => %d\n", GetCurrentProcessId());
+    while (1);
+
+    return EXIT_SUCCESS;
+}</code></pre>
+        <div class="pindex">
+            In the lower pane of Process Explorer, we can see that a DLL with name <i>`aswhook.dll`</i> has been loaded into our process immediately at startup:
+        </div>
+        <br>
+        <img src="images/Dummy_Avast_DLL.png" alt="avasthook">
+        <br><br>
+        <div class="pindex">
+            Patching the entry point of a DLL won't amount to much once the DLL is loaded and has already executed it's <i>`DllMain()`</i> function (most likely to create a new thread inside the process),
+            <br>so the entry point has to be patched before the execution takes place.
+            <br>To achieve this, the target process can be created by another <b>"spawner"</b> process, which will act and serve as a debugger to our target.
+            <br>The <i>`DEBUG_EVENT`</i> structure provides a lot of useful information, but for this purpose, the main point of interest will be the <i>`LOAD_DLL_DEBUG_INFO`</i> debug event:
+        </div>
+        <pre><code>/* https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-debug_event */
+typedef struct _DEBUG_EVENT {
+    DWORD dwDebugEventCode;
+    DWORD dwProcessId;
+    DWORD dwThreadId;
+    union {
+        EXCEPTION_DEBUG_INFO      Exception;
+        CREATE_THREAD_DEBUG_INFO  CreateThread;
+        CREATE_PROCESS_DEBUG_INFO CreateProcessInfo;
+        EXIT_THREAD_DEBUG_INFO    ExitThread;
+        EXIT_PROCESS_DEBUG_INFO   ExitProcess;
+        LOAD_DLL_DEBUG_INFO       LoadDll;              /* Reports a load-dynamic-link-library (DLL) debugging event.
+                                                         * The value of u.LoadDll specifies a LOAD_DLL_DEBUG_INFO structure. */
+        UNLOAD_DLL_DEBUG_INFO     UnloadDll;
+        OUTPUT_DEBUG_STRING_INFO  DebugString;
+        RIP_INFO                  RipInfo;
+    } u;
+} DEBUG_EVENT, *LPDEBUG_EVENT;</code></pre>
+        <div class="pindex">
+            We can create a new process using the <i>`CreateProcess()`</i> function, which <a target="_blank" style="color: rgb(0, 255, 0);" href="https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags">Process Creation Flags</a> can be set to <i>`DEBUG_PROCESS`</i>:
+            <pre><code>`DEBUG_PROCESS` - The calling thread starts and debugs the new process and all child processes created by the new process. It can receive all related debug events using the WaitForDebugEvent function.</pre></code>
+            By gluing all of this together, the debugger will be able to break the debuggee every time a new DLL is loaded, effectively before executing any of it's code.
+            <br>The entry point can now be patched as simply as rewriting the first byte with <i>`(BYTE) 0xc3`</i> - the opcode for <a target="_blank" style="color: rgb(0, 255, 0);" href="https://www.felixcloutier.com/x86/ret.html">RET</a> instruction.
+            <br>Now let's see the result in action:
+        </div>
+    <br>
+    <img src="images/Blocked.png" alt="blocked">
+    <br><img src="images/yay.png" alt="yyyaaaaaaaaaaaayyy" width="256" height="256">
+    <div class="pbody"><a href="pindex.html" style="color: red;">GO BACK</a></div>
+    </body>
+</html>

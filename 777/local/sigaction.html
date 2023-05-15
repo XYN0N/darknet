@@ -1,0 +1,416 @@
+<html>
+    <head>
+        <title>sigaction</title>
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="highlight/windows-95.min.css">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        <script src="highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <div class="phead">
+            Constructing a POSIX signal handler in x64 assembly
+        </div>
+        <div class="pindex">
+            Imagine this situation: You wake up, make yourself a bowl of cereal, eat it and rush to the bathroom to spend an hour thinking about the meaning of existence.
+            <br>After approximately 2.71828182 minutes, you get a brilliant idea to implement a POSIX signal handler... in assembly.
+            <br>You have already written some C code on a piece of toiler paiper to visualize the idea of what you actually want to write in assembly and it looks something like this: 
+        </div>
+        <pre><code>#include &lt;stdio.h>
+#include &lt;signal.h>
+#include &lt;stdlib.h>
+
+void sighandler(int sig) {
+    puts("Signal Caught");
+    exit(EXIT_SUCCESS);
+}
+
+int main(void) {
+    struct sigaction sa = { 0 };
+    sa.sa_handler = sighandler;
+
+    if (EXIT_SUCCESS != sigaction(SIGINT, &sa, NULL)) {
+        return EXIT_FAILURE;
+    }
+
+    while (1);
+
+    return EXIT_SUCCESS;
+}</code></pre>
+        <div class="pindex">
+            Without hesitating, you grab your ThinkPad and start writing some broken code. You now have some basic prologues, exit routines, syscall wrappers,.. and now it's time to look at `sys_rt_sigaction`.
+            <br>Looking at the x86_64 Linux syscall table, you find the `sys_rt_sigaction` syscall and it's required arguments, which look like this:
+        </div>
+        <pre><code>--------------------------------------------------------------------------------------------------
+| RAX | SYSCALL          |       RDI       |       RSI       |       RDX       |       R10       |
+|------------------------------------------------------------------------------------------------|
+| 13  | sys_rt_sigaction | int sig         | const struct    | struct          | size_t          |
+|     |                  |                 | sigaction *act  | sigaction *oact | sigsetsize      |
+--------------------------------------------------------------------------------------------------
+        </code></pre>
+        <div class="pindex">
+            Great! You open up the <a target="_blank" style="color: red;" href="https://linux.die.net/man/2/rt_sigaction">Linux man pages</a> to see how the `struct sigaction` is defined:
+        </div>
+        <pre><code>struct sigaction {
+    void     (*sa_handler)(int);
+    void     (*sa_sigaction)(int, siginfo_t *, void *);
+    sigset_t   sa_mask;
+    int        sa_flags;
+    void     (*sa_restorer)(void);
+};</code></pre>
+        <div class="pindex">
+            Now you reconstruct this,.. `struct` in NASM assembly and when you finish writing the 80 characters, you wipe off the sweat from your forehead and do a victory dance.
+            <br>The hard work of clicking the keyboard 80 times has paid off and your source looks something like this:
+        </div>
+        <pre><code>global _start
+
+%define SIGACTION_SYSCALLNO         13
+%define SIGINT                      2
+
+%define __BITS_PER_LONG             64
+%define _NSIG                       64
+%define _NSIG_BPW                   __BITS_PER_LONG
+%define _NSIG_WORDS                 (_NSIG / _NSIG_BPW)
+
+struc sigset
+    .sigaction          resq        _NSIG_WORDS
+endstruc
+
+struc sigaction
+    .sa_handler         resq        1
+    .sa_sigaction       resq        1
+    .sa_mask            resb        sigset_size
+    .sa_flags           resd        1
+    .sa_restorer        resq        1
+endstruc
+
+section .data
+    catch_message       db          "Signal Caught", 0xa, 0x0
+
+section .bss
+    sa_act              resb        sigaction_size
+
+section .text
+
+strlen:
+    push    rdi
+    xor     eax, eax
+    xor     ecx, ecx
+    dec     ecx
+    repne   scasb
+    sub     eax, ecx
+    sub     eax, 2
+    pop     rdi
+    ret
+
+puts:
+    call    strlen
+    xor     esi, esi
+    inc     esi
+    xchg    rsi, rdi
+    mov     edx, eax
+    mov     eax, edi
+    syscall
+    ret
+
+exit:
+    mov     eax, 0x3c
+    syscall
+
+sighandler:
+    mov     rdi, catch_message
+    call    puts
+    xor     edi, edi
+    call    exit
+
+_start:
+    mov     rax, sighandler
+    mov     [sa_act + sigaction.sa_handler], rax
+
+    xor     eax, eax
+    mov     DWORD [sa_act + sigaction.sa_mask], eax
+
+
+    mov     eax, SIGACTION_SYSCALLNO
+    mov     edi, SIGINT
+    mov     rsi, sa_act
+    xor     edx, edx
+    mov     r10, sigset_size
+
+    syscall
+
+    test    al, al
+    jnz     .fail
+
+
+    xor     edi, edi
+    jmp     $
+
+.fail:
+    mov     edi, 256
+    sub     edi, eax
+    call    exit</code></pre>
+        <div class="pindex">
+            As soon as you run it, you see no output, meaning the syscall returned EXIT_SUCCESS and you hit the infinite loop. Yaaaayyyy!
+            <Br>With smug expression, you press <span style="color: lime;">CTRL+C</span> to send `SIGINT` to your program and expect to see "Signal Caught" message, but instead, from the pits of hell, a familiar text slaps you harder than the electricity bill after mining Dogecoin 24 hours a day.
+        </div>
+        <pre><code>^CSegmentation fault</code></pre>
+        <div class="pindex">POV: you rn</div>
+        <img src="images/stage4-uncanny.jpg" width="128" height="128" alt="stage4">
+        <div class="pindex">
+            So what the hell happened? Your code should be a rough translation of the C code, right? Is it time to sell your ThinkPad and give knitting another chance?
+            <br>Well before you start evaluating your life choices, let's look at what GDB has to say:
+        </div>
+        <pre><code>$ gdb ./sig
+gef> b sighandler
+gef> handle SIGINT pass nostop
+gef> c
+&lt;CTRL+C>
+[#0] Id 1, Name: "sig", stopped 0x40107f in _start (), reason: SIGSEGV
+------------------------------------------------------------ trace ----
+[#0] 0x40107f -> _start()
+-----------------------------------------------------------------------
+gef> disass /r $rip, +1
+Dump of assembler code from 0x40107f to 0x401080:
+=> 0x000000000040107f <_start+63>:      eb fe   jmp    0x40107f <_start+63>
+End of assembler dump.</code></pre>
+    <div class="pindex">
+        Well crap, we didn't even hit the breakpoint on `sighandler`.
+        <br>Let's try to break on syscall:
+    </div>
+    <pre><code>gef> catch syscall
+Catchpoint 1 (any syscall)
+gef> r
+-------------------------------------------------------- registers ----
+$rax   : 0xffffffffffffffda
+$rbx   : 0x0
+$rcx   : 0x00000000401079  ->  <_start+57> test al, al
+$rdx   : 0x0
+$rsp   : 0x007fffffffe080  ->  0x0000000000000001
+$rbp   : 0x0
+$rsi   : 0x00000000402010  ->  0x0000000040102a  ->  <sighandler+0> movabs rdi, 0x402000
+$rdi   : 0x2
+$rip   : 0x00000000401079  ->  <_start+57> test al, al
+$r8    : 0x0
+$r9    : 0x0
+$r10   : 0x8
+</code></pre>
+    <div class="pindex">
+        Alright, `RDI` is `0x2`, which is indeed SIGINT signal number, that's fine.
+        <br>`R10` is `sizeof(sigset_t)`, which according to <a href="https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/signal.h#L19" style="color:lime">signal.h</a> should be `8`.
+        <br>`RDX` is 0, as in `NULL`, since we didn't want to save the current action state for later restoration.
+        <br>Well then let's see what's inside `struct sigaction sa_act` which `RSI` points to:
+    </div>
+<pre><code>gef> p/d (int *) &sigaction_size
+$1 = 36
+gef> x/36xb $rsi
+0x402010:       0x2a    0x10    0x40    0x00    0x00    0x00    0x00    0x00
+0x402018:       0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x402020:       0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x402028:       0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x402030:       0x00    0x00    0x00    0x00
+gef> p/x &sighandler
+$2 = 0x40102a
+</code></pre>
+    <div class="pindex">
+        We can see that the first entry at `0x402010`, which is the `sa_handler` field of `struct sigaction` points to `sighandler`, which is exactly what we need.
+        <br>The rest of the struct are all zeros. So what now? Do we: A) consult the magic crystal ball, or B) debug the C binary that actually worked and check for differences.
+        <br>It doesn't really matter which option you choose. As you'd find out after gazing into the magic crystal ball, it shows the GDB output either way.
+        <br>So let's look at it:
+    </div>
+<pre><code>$ gdb ./csig
+gef> catch syscall 13
+Catchpoint 1 (syscall 'rt_sigaction' [13])
+gef> r
+-------------------------------------------------------- registers ----
+$rax   : 0xffffffffffffffda
+$rbx   : 0x005555555551e0  →  <__libc_csu_init+0> push r15
+$rcx   : 0x007ffff7e1f9f2  →  0x870ffffff0003d48 ("H="?)
+$rdx   : 0x0
+$rsp   : 0x007fffffffddb0  →  0x00555555555159  →  <sighandler+0> push rbp
+$rbp   : 0x007fffffffdfa0  →  0x0000000000000000
+$rsi   : 0x007fffffffddb0  →  0x00555555555159  →  <sighandler+0> push rbp
+$rdi   : 0x2
+$rip   : 0x007ffff7e1f9f2  →  0x870ffffff0003d48 ("H="?)
+$r8    : 0x0
+$r9    : 0x007ffff7fdc1f0  →  <_dl_fini+0> push rbp
+$r10   : 0x8
+-----------------------------------------------------------------------
+[#0] Id 1, Name: "csig", stopped 0x7ffff7e1f9f2 in __GI___libc_sigaction (), reason: BREAKPOINT
+-----------------------------------------------------------------------</code></pre>
+    <div class="pindex">
+        Right on. We can immediately see that `RDI`, `R10` and `RDX` are identical in our NASM binary.
+        <br>So let's look at `RSI`, a.k.a. `struct sigaction`:
+    </div>
+<pre><code>gef> p/d sizeof(struct sigaction)
+$1 = 152
+gef> x/152xb $rsi
+0x7fffffffddb0: 0x59    0x51    0x55    0x55    0x55    0x55    0x00    0x00
+0x7fffffffddb8: 0x00    0x00    0x00    0x04    0x00    0x00    0x00    0x00
+0x7fffffffddc0: 0x20    0xf9    0xe1    0xf7    0xff    0x7f    0x00    0x00
+0x7fffffffddc8: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffddd0: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffddd8: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffdde0: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffdde8: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffddf0: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffddf8: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde00: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde08: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde10: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde18: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde20: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde28: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde30: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde38: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde40: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+</code></pre>
+    <div class="pindex">
+        Well, what the heck. Right there we can see several differences that pop out:
+        <br>1.) `sizeof(struct sigaction)` differs. In our binary, this is exactly 36 bytes, but in `libc`, it's 152 bytes.
+        <br>2.) The second field of definitely does NOT look like a valid address for `void (*sa_sigaction)(int, siginfo_t *, void *);`.
+        <br>3.) The third field is a pointer, which could technically fit into `sigset_t` a.k.a. `unsigned long sig[1]`, but this definition would not make any sense.
+        <br>So before we look at these things, let's view local variables for the function in which this syscall was caught:
+    </div>
+<pre><code>gef> info locals
+kact = {
+    k_sa_handler = 0x555555555159 <sighandler>,
+    sa_flags = 0x4000000,
+    sa_restorer = 0x7ffff7e1f920 <__restore_rt>,
+    sa_mask = {
+      __val = {0x0 <repeats 16 times>}
+    }
+}</code></pre>
+    <div class="pindex">
+        Oooooookay? It seems that `struct sigaction` is used for feeding a "kernel equivalent" of itself. And if we look into <a href="https://elixir.bootlin.com/linux/latest/source/arch/x86/include/uapi/asm/signal.h#L94" style="color: lime;">UAPI</a>, we find that this is exactly the case.
+        `sa_handler`, as shown above, points to our `sighandler`, which is okay.
+        <br>The next field - `sa_flags` hold the value `0x4000000`, which again by looking at the same source file from the link above, we find this value is called `SA_RESTORER`.
+        <br>Now let's try to disassemble the third field, which is a pointer to function `__restore_rt`:
+    </div>
+<pre><code>gef> disass /r __restore_rt
+Dump of assembler code for function __restore_rt:
+    0x00007ffff7e1f920 <+0>:     48 c7 c0 0f 00 00 00    mov    rax,0xf
+    0x00007ffff7e1f927 <+7>:     0f 05                   syscall
+    0x00007ffff7e1f929 <+9>:     0f 1f 80 00 00 00 00    nop    DWORD PTR [rax+0x0]
+End of assembler dump.</code></pre>
+    <div class="pindex">
+        And all that this function does is a syscall with number `0xf` (15), which as the syscall table reveals is:
+    </div>
+<pre><code>--------------------------------------------
+| RAX | SYSCALL          |       RDI       |
+|------------------------------------------|
+| 15  | sys_rt_sigreturn | unsigned long   |
+|     |                  | __unused        |
+--------------------------------------------
+</code></pre>
+    <div class="pindex">
+        So now that we posses this supreme knowledge, let's try to edit our assembly source accordingly:    
+    </div>
+<pre><code>global _start
+
+%define SIGACTION_SYSCALLNO         13
+%define SIGRETURN_SYSCALLNO         15
+%define SIGINT                      2
+
+%define __BITS_PER_LONG             64
+%define _NSIG                       64
+%define _NSIG_BPW                   __BITS_PER_LONG
+%define _NSIG_WORDS                 (_NSIG / _NSIG_BPW)
+
+%define SA_RESTORER                 0x4000000
+
+struc sigset
+    .sigaction          resq        _NSIG_WORDS
+endstruc
+
+struc sigaction
+    .sa_handler         resq        1
+    .sa_flags           resd        1
+    .sa_restorer        resq        1
+    .sa_mask            resq        1
+endstruc
+
+section .data
+    catch_message       db          "Signal Caught", 0xa, 0x0
+
+section .bss
+    sa_act              resb        sigaction_size
+
+section .text
+
+strlen:
+    push    rdi
+    xor     eax, eax
+    xor     ecx, ecx
+    dec     ecx
+    repne   scasb
+    sub     eax, ecx
+    sub     eax, 2
+    pop     rdi
+    ret
+
+puts:
+    call    strlen
+    xor     esi, esi
+    inc     esi
+    xchg    rsi, rdi
+    mov     edx, eax
+    mov     eax, edi
+    syscall
+    ret
+
+exit:
+    mov     eax, 0x3c
+    syscall
+
+restorer:
+    mov     eax, SIGRETURN_SYSCALLNO
+    syscall
+
+sighandler:
+    mov     rdi, catch_message
+    call    puts
+    xor     edi, edi
+    call    exit
+
+_start:
+    mov     rax, sighandler
+    mov     [sa_act + sigaction.sa_handler], rax
+
+    mov     rax, restorer
+    mov     [sa_act + sigaction.sa_restorer], rax
+
+    mov     eax, SA_RESTORER
+    mov     DWORD [sa_act + sigaction.sa_flags], eax
+
+    xor     eax, eax
+    mov     DWORD [sa_act + sigaction.sa_mask], eax
+
+
+    mov     eax, SIGACTION_SYSCALLNO
+    mov     edi, SIGINT
+    mov     rsi, sa_act
+    xor     edx, edx
+    mov     r10, sigset_size
+
+    syscall
+
+    test    al, al
+    jnz     .fail
+
+
+    xor     edi, edi
+    jmp     $
+
+.fail:
+    mov     edi, 256
+    sub     edi, eax
+    call    exit</code></pre>
+    <div class="pindex">
+        And let's see what we get by running it and smashing <span style="color: lime;">CTRL+C</span>:
+    </div>
+    <pre><code>^CSignal Caught</code></pre>
+    <img src="images/yay.png" alt="yyyaaaaaaaaaaaayyy" width="256" height="256">
+    <div class="pbody"><a href="pindex.html" style="color: red;">GO BACK</a></div>
+    </body>
+</html>

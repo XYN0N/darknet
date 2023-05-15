@@ -1,0 +1,80 @@
+@font-face {
+	font-family: 'Px437';	
+	src: url("Px437.ttf");
+}
+
+body {
+	background-color: black;
+	color: #ff0000;
+    overflow: hidden;
+}
+
+html {
+    overflow: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.pbody {
+	background-color: black;
+	line-height: 1.25;
+	color: #ff0000;
+	font-family: 'Px437';
+	font-size: 36px;
+	text-align: center;
+}
+
+.pindex {
+	background-color: black;
+	color: #ffffff;
+	font-family: 'Px437';
+	font-size: 16px;
+	text-align: left;
+	padding-left: 24;
+	font-weight: normal;
+	line-height: 1.15;
+}
+
+.pindex_red {
+	background-color: black;
+	color: #ff0000;
+	font-family: 'Px437';
+	font-size: 16px;
+	text-align: left;
+	padding-left: 24;
+	font-weight: normal;
+	line-height: 1.15;
+}
+
+.phead {
+	background-color: black;
+	color: #ff0000;
+	font-family: 'Px437';
+	font-size: 36px;
+	text-align: left;
+	padding-left: 16;
+	line-height: 2;
+	font-weight: normal;
+}
+
+.tab {
+	Padding-left:16px;
+}
+
+  
+.center {
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.stats {
+    position: absolute;
+    top: 100%;
+    right: 0%;
+}
