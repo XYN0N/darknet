@@ -9,6 +9,6 @@ This repository holds my HTML site for the public.
 
 | My Telegram: https://t.me/SwirlingGalaxy
 
-| My Instagram: https://instagram.com/Maiseme
+| My channel: https://t.me/Timesea
 
 The following site has been completely written and maintained by yours truly (XYN0N - Macs).
