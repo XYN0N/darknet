@@ -1,34 +1,71 @@
-async function takeScreenshot() {
-    try {
-        const response = await fetch('https://app.earth2.io/#profile/54638dca-25ba-4807-ac37-fe50b2530875/properties');
-        const html = await response.text();
+// URL del servizio per catturare lo screenshot
+const screenshotUrl = 'https://api.apiflash.com/v1/urltoimage';
 
-        // Crea un iframe e inserisci l'HTML della pagina di Earth2
-        const iframe = document.createElement('iframe');
-        document.body.appendChild(iframe);
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        doc.body.innerHTML = html;
+// Chiave di accesso al servizio (sostituisci con la tua chiave)
+const accessKey = '174aec80e7134d2681b26854b12536b3';
 
-        // Aspetta un po' per garantire che la pagina sia stata caricata completamente
-        await new Promise(resolve => setTimeout(resolve, 2000));
+// URL della pagina da catturare lo screenshot (sostituisci con l'URL della tua pagina)
+const pageUrl = 'https://app.earth2.io/#profile/54638dca-25ba-4807-ac37-fe50b2530875/properties';
 
-        // Cattura lo screenshot del contenuto dell'iframe
-        const canvas = document.createElement('canvas');
-        canvas.width = iframe.offsetWidth;
-        canvas.height = iframe.offsetHeight;
-        const context = canvas.getContext('2d');
-        context.drawImage(iframe, 0, 0, iframe.offsetWidth, iframe.offsetHeight);
-        
-        // Ottieni l'URL dell'immagine dal canvas e imposta l'immagine nell'elemento <img>
-        const screenshotImg = document.getElementById('screenshot');
-        screenshotImg.src = canvas.toDataURL('image/png');
+// Variabile per tenere traccia del livello di zoom
+let zoomLevel = 1;
 
-        // Rimuovi l'iframe
-        document.body.removeChild(iframe);
-    } catch (error) {
-        console.error('Si è verificato un errore durante la cattura dello screenshot:', error);
+// Funzione per ingrandire l'immagine al massimo
+function toggleEnlarge() {
+    const screenshot = document.getElementById('screenshot');
+    if (screenshot.style.maxWidth === '100%') {
+        screenshot.style.maxWidth = '80%';
+        screenshot.style.maxHeight = '80vh';
+    } else {
+        screenshot.style.maxWidth = '100%';
+        screenshot.style.maxHeight = '100%';
     }
 }
 
-// Cattura lo screenshot quando la pagina è completamente caricata
-window.onload = takeScreenshot;
+// Funzione per zoomare in avanti
+function zoomIn() {
+    const screenshot = document.getElementById('screenshot');
+    zoomLevel += 0.1;
+    screenshot.style.transform = `scale(${zoomLevel})`;
+}
+
+// Funzione per zoomare indietro
+function zoomOut() {
+    const screenshot = document.getElementById('screenshot');
+    zoomLevel -= 0.1;
+    screenshot.style.transform = `scale(${zoomLevel})`;
+}
+
+// Funzione per catturare lo screenshot e aggiornare l'immagine
+async function takeScreenshot() {
+    try {
+        // Aggiungi un timestamp per evitare la cache
+        const timestamp = new Date().getTime();
+
+        // Costruisci l'URL completo con la chiave di accesso e il timestamp
+        const fullUrl = `${screenshotUrl}?access_key=${accessKey}&url=${encodeURIComponent(pageUrl)}&fresh=true&full_page=true&no_cookie_banners=true&timestamp=${timestamp}`;
+
+        // Richiedi l'immagine dello screenshot al servizio
+        const response = await fetch(fullUrl);
+        
+        // Se la richiesta ha avuto successo, aggiorna l'immagine
+        if (response.ok) {
+            const blob = await response.blob();
+            const imgUrl = URL.createObjectURL(blob);
+            // Sostituisci l'immagine corrente con quella appena ottenuta
+            const screenshot = document.getElementById('screenshot');
+            screenshot.src = imgUrl;
+            screenshot.onload = () => {
+                // Nascondi il simbolo di caricamento
+                document.querySelector('.loading').style.display = 'none';
+            };
+        } else {
+            console.error('Errore durante il recupero dello screenshot:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Si è verificato un errore:', error);
+    }
+}
+
+// Cattura lo screenshot al caricamento della pagina
+takeScreenshot();
