@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Screenshot Viewer</title>
+    <style>
+        #screenshot {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="screenshot-container">
+        <img id="screenshot" src="" alt="Screenshot">
+    </div>
+
+    <script>
+        async function takeScreenshot() {
+            const response = await fetch('/screenshot');
+            const data = await response.blob();
+            const url = URL.createObjectURL(data);
+            document.getElementById('screenshot').src = url;
+        }
+
+        // Aggiorna lo screenshot ogni volta che la pagina viene caricata
+        window.onload = takeScreenshot;
+        // Aggiorna lo screenshot ogni 5 minuti (300000 ms)
+        setInterval(takeScreenshot, 300000);
+    </script>
+</body>
+</html>
