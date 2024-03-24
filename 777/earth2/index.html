@@ -9,6 +9,8 @@
             font-family: Arial, sans-serif;
             background-color: #000;
             color: #fff;
+            margin: 0;
+            padding: 0;
         }
         #title {
             font-size: 24px;
@@ -46,43 +48,52 @@
         .skin-container {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
             margin: 0 auto;
             max-width: 80%;
+            border: 1px solid #fff;
+            padding: 10px;
+            box-sizing: border-box;
         }
-        .skin-container .skin-group {
-            width: 48%;
-        }
-        .skin-container img {
-            width: 100%;
+
+.skin-group {
+  width: calc(51% - 19px); /* Adjust width here */
+  text-align: center;
+  margin-bottom: 20px;
+  margin-right: 0;
+  margin-left: 0;
+}
+        .skin-group img {
+            width: 75%;
             border: 1px solid #ccc;
             margin-bottom: 10px;
         }
         .skin-description {
-            text-align: center;
             font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div id="title">MY EARTH2.IO PROFILE</div>
-
+    <div id="title">MY EARTH2.IO SKINS PROFILE</div>
+<font color="purple">
     <div id="screenshot-container">
-        <div class="loading"></div>
-        <img id="screenshot" src="" alt="Screenshot" onclick="toggleEnlarge()">
     </div>
 
     <div class="skin-container">
         <div class="skin-group">
             <img src="E2 GDC 2024 - RADIO ACTIVE.jpg" alt="Skin 1">
+
             <p class="skin-description">E2 GDC 2024 - Radioactive, Quantity in the world (250), Shirt for Male Body Type, Only available for 1 day ever, E$15.00</p>
         </div>
         <div class="skin-group">
+		<font color="white">
             <img src="E2 GDC 2024 - BASIC.jpg" alt="Skin 2">
             <p class="skin-description">E2 GDC 2024, Quantity in the world (10000), Shirt for Male Body Type, Only available for 1 day ever, E$2.50</p>
         </div>
-		
-		 <div class="skin-group">
-            <img src="Jolly Roger Radioactive.png" alt="Skin 3">
+        <div class="skin-group" style="width: 100%; text-align: center;">
+		<font color="cyan">
+            <img src="Jolly Roger Radioactive.png" alt="Skin 3" style="max-height: 70vh;"> <!-- Rendiamo "Jolly Roger" leggermente più piccolo -->
             <p class="skin-description">E2 Jolly Roger Radioactive, Quantity in the world (250), Male Body Type, Only available for 1 day ever, E$30</p>
         </div>
     </div>
