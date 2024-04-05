@@ -10,12 +10,15 @@
       margin: 0;
       padding: 0;
       background-color: black; /* Background nero */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     #container {
       width: 800px;
       height: 600px;
       border: 1px solid black; /* Bordi neri */
-      margin: 20px auto;
       position: relative;
       overflow: hidden;
     }
@@ -40,9 +43,9 @@
   </style>
 </head>
 <body>
-  <h1>Simulazione problema dei 3 corpi</h1>
-  <p>Questa simulazione mostra il moto di 3 stelle attratte tra loro gravitazionalmente fisse ad un asse centrale</p>
   <div id="container">
+    <h1>Simulazione problema dei 3 corpi</h1>
+    <p>Questa simulazione mostra il moto di 3 stelle attratte tra loro gravitazionalmente fisse ad un asse centrale</p>
     <canvas id="canvas"></canvas>
     <div id="counter">Year: 0 Month: 0 Day: 0 Hour: 0 Minute: 0 Second: 0</div>
   </div>
@@ -58,21 +61,12 @@
       let canvas = createCanvas(800, 600);
       canvas.parent('container'); // Make canvas a child of container div
       center = createVector(width / 2, height / 2); // Center of the canvas
-      for (let i = 0; i < 3; i++) {
-        let size;
-        let color;
-        if (i === 0) {
-          color = 'blue';
-          size = 25; // Dimensione più grande
-        } else if (i === 1) {
-          color = 'red';
-          size = 18; // Dimensione leggermente più piccola
-        } else {
-          color = 'green';
-          size = 15; // Dimensione più piccola
-        }
-        stars.push(new Star(random(center.x - 100, center.x + 100), random(center.y - 100, center.y + 100), random(-1, 1), random(-1, 1), size, color));
-      }
+
+      // Creazione delle stelle
+      stars.push(new Star(center.x, center.y, random(-1, 1), random(-1, 1), 30, 'blue')); // Stella blu grande
+      stars.push(new Star(center.x - 150, center.y - 100, random(-1, 1), random(-1, 1), 15, 'yellow')); // Stella gialla piccola
+      stars.push(new Star(center.x, center.y + 200, random(-1, 1), random(-1, 1), 20, 'green')); // Stella verde piccola
+
       setInterval(updateTime, 1000); // Update time every second
     }
 
@@ -120,14 +114,14 @@
         this.position = createVector(x, y);
         this.velocity = createVector(vx, vy);
         this.acceleration = createVector(0, 0);
-        this.size = size; // Dimensione della stella
+        this.size = size; // Dimensione del corpo
         this.color = color;
+        this.maxSpeed = 2; // Velocità massima ridotta per una rotazione più lenta
         this.mass = size / 2; // Massa proporzionale alla dimensione (più piccola stella ha meno massa)
-        this.maxSpeed = 6; // Maximum speed (slightly increased)
       }
 
       update() {
-        // Calculate gravitational forces between stars
+        // Calcolo delle forze gravitazionali tra le stelle
         for (let other of stars) {
           if (other !== this) {
             let force = p5.Vector.sub(other.position, this.position);
@@ -138,28 +132,37 @@
             this.acceleration.add(force.div(this.mass));
           }
         }
-        // Add gravitational force towards the center (increased attraction)
-        let centerForce = p5.Vector.sub(center, this.position);
-        let centerDistanceSq = centerForce.magSq();
-        centerDistanceSq = constrain(centerDistanceSq, 25, 1000);
-        let centerStrength = (gConstant * this.mass * 10) / centerDistanceSq; // Increased strength
-        centerForce.setMag(centerStrength);
-        this.acceleration.add(centerForce.div(this.mass));
-
+        
+        // Rallenta e riorienta le stelle se si avvicinano ai bordi
+        let borderForce = createVector(0, 0);
+        let distanceToCenter = dist(this.position.x, this.position.y, center.x, center.y);
+        if (distanceToCenter > 250) {
+          let steering = p5.Vector.sub(center, this.position);
+          steering.setMag(0.05);
+          this.velocity.add(steering);
+        }
+        if (this.position.x <= 50) {
+          borderForce.x += 1;
+        } else if (this.position.x >= width - 50) {
+          borderForce.x -= 1;
+        }
+        if (this.position.y <= 50) {
+          borderForce.y += 1;
+        } else if (this.position.y >= height - 50) {
+          borderForce.y -= 1;
+        }
+        this.acceleration.add(borderForce);
+        
         this.velocity.add(this.acceleration);
         this.velocity.limit(this.maxSpeed); // Limit speed
         this.position.add(this.velocity);
         this.acceleration.mult(0);
-
-        // Ensure stars stay within container boundaries
-        this.position.x = constrain(this.position.x, 0, width);
-        this.position.y = constrain(this.position.y, 0, height);
       }
 
       display() {
         fill(this.color);
         noStroke();
-        ellipse(this.position.x, this.position.y, this.size, this.size); // Utilizzo size per la dimensione
+        ellipse(this.position.x, this.position.y, this.size, this.size);
       }
     }
   </script>
