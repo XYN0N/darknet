@@ -16,8 +16,10 @@
       height: 100vh;
     }
     #container {
-      width: 800px;
-      height: 600px;
+      width: 90vw; /* Utilizza il 90% della larghezza del viewport */
+      max-width: 800px; /* Larghezza massima di 800px */
+      height: 90vh; /* Utilizza il 90% dell'altezza del viewport */
+      max-height: 600px; /* Altezza massima di 600px */
       border: 1px solid white; /* Bordi bianchi */
       position: relative;
       overflow: hidden;
@@ -26,6 +28,8 @@
       position: absolute;
       left: 0;
       top: 0;
+      width: 100%; /* Occupa tutta la larghezza del container */
+      height: 100%; /* Occupa tutta l'altezza del container */
     }
     #counter {
       position: absolute;
@@ -134,17 +138,17 @@
         }
         
         // Rallenta e riorienta le stelle se si avvicinano ai bordi
-let borderForce = createVector(0, 0);
-let distanceToCenter = dist(this.position.x, this.position.y, center.x, center.y);
-if (distanceToCenter > 250) {
-  let steering = p5.Vector.sub(center, this.position);
-  steering.setMag(0.05);
-  this.velocity.add(steering);
-}
+        let borderForce = createVector(0, 0);
+        let distanceToCenter = dist(this.position.x, this.position.y, center.x, center.y);
+        if (distanceToCenter > 250) {
+          let steering = p5.Vector.sub(center, this.position);
+          steering.setMag(0.05);
+          this.velocity.add(steering);
+        }
 
-// Limita la posizione delle stelle all'interno del riquadro
-this.position.x = constrain(this.position.x, 50, width - 50);
-this.position.y = constrain(this.position.y, 50, height - 50);
+        // Limita la posizione delle stelle all'interno del riquadro
+        this.position.x = constrain(this.position.x, 50, width - 50);
+        this.position.y = constrain(this.position.y, 50, height - 50);
         
         if (this.position.x <= 50) {
           borderForce.x += 1;
