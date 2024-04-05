@@ -59,11 +59,19 @@
       canvas.parent('container'); // Make canvas a child of container div
       center = createVector(width / 2, height / 2); // Center of the canvas
       for (let i = 0; i < 3; i++) {
+        let size;
         let color;
-        if (i === 0) color = 'red';
-        else if (i === 1) color = 'green';
-        else color = 'blue';
-        stars.push(new Star(random(center.x - 100, center.x + 100), random(center.y - 100, center.y + 100), random(-1, 1), random(-1, 1), random(10, 20), color));
+        if (i === 0) {
+          color = 'blue';
+          size = 25; // Dimensione più grande
+        } else if (i === 1) {
+          color = 'red';
+          size = 18; // Dimensione leggermente più piccola
+        } else {
+          color = 'green';
+          size = 15; // Dimensione più piccola
+        }
+        stars.push(new Star(random(center.x - 100, center.x + 100), random(center.y - 100, center.y + 100), random(-1, 1), random(-1, 1), size, color));
       }
       setInterval(updateTime, 1000); // Update time every second
     }
@@ -108,12 +116,13 @@
     }
 
     class Star {
-      constructor(x, y, vx, vy, mass, color) {
+      constructor(x, y, vx, vy, size, color) {
         this.position = createVector(x, y);
         this.velocity = createVector(vx, vy);
         this.acceleration = createVector(0, 0);
-        this.mass = mass;
+        this.size = size; // Dimensione della stella
         this.color = color;
+        this.mass = size / 2; // Massa proporzionale alla dimensione (più piccola stella ha meno massa)
         this.maxSpeed = 6; // Maximum speed (slightly increased)
       }
 
@@ -150,7 +159,7 @@
       display() {
         fill(this.color);
         noStroke();
-        ellipse(this.position.x, this.position.y, this.mass, this.mass);
+        ellipse(this.position.x, this.position.y, this.size, this.size); // Utilizzo size per la dimensione
       }
     }
   </script>
