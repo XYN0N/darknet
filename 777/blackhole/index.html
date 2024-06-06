@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione Magnetar</title>
+    <style>
+        body {
+            background-color: #add8e6; /* Light blue */
+            color: #000;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0000cd; /* Dark blue */
+        }
+
+        #simulation-container {
+            width: 600px;
+            height: 400px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+            background-color: #add8e6; /* Light blue */
+        }
+
+        .star {
+            width: 40px;
+            height: 40px;
+            background-image: url('star.png');
+            background-size: cover;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .gravitational-wave {
+            width: 20px;
+            height: 20px;
+            background-color: blue;
+            position: absolute;
+            border-radius: 50%;
+            animation: none;
+        }
+
+        .black-hole {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            left: calc(50% - 30px);
+            top: calc(50% - 30px);
+            animation: rotateBlackHole 10s linear infinite;
+        }
+        
+        @keyframes rotateBlackHole {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes propagateWave {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 400px;
+                height: 400px;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulazione Magnetar</h1>
+    <div id="simulation-container">
+        <div class="star" id="star1"></div>
+        <div class="star" id="star2"></div>
+        <div class="gravitational-wave" id="wave"></div>
+        <img class="black-hole" src="black_hole.png" alt="Black Hole">
+    </div>
+    <script>
+        const star1 = document.getElementById('star1');
+        const star2 = document.getElementById('star2');
+        const wave = document.getElementById('wave');
+        const container = document.getElementById('simulation-container');
+
+        let angle1 = 0;
+        let angle2 = Math.PI;
+        let speed1 = 0.02; // Speed of the first star
+        let speed2 = 0.01; // Speed of the second star
+        const radius = 100;
+        const centerX = container.offsetWidth / 2;
+        const centerY = container.offsetHeight / 2;
+        const collisionDistance = 20; // Distance at which collision occurs
+
+        function updatePosition() {
+            angle1 += speed1;
+            angle2 += speed2;
+
+            const x1 = centerX + radius * Math.cos(angle1) - star1.offsetWidth / 2;
+            const y1 = centerY + radius * Math.sin(angle1) - star1.offsetHeight / 2;
+            const x2 = centerX + radius * Math.cos(angle2) - star2.offsetWidth / 2;
+            const y2 = centerY + radius * Math.sin(angle2) - star2.offsetHeight / 2;
+
+            star1.style.left = `${x1}px`;
+            star1.style.top = `${y1}px`;
+            star2.style.left = `${x2}px`;
+            star2.style.top = `${y2}px`;
+
+            // Check for collision
+            const dx = x1 - x2;
+            const dy = y1 - y2;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= collisionDistance) {
+                wave.style.left = `${(x1 + x2) / 2 - wave.offsetWidth / 2}px`;
+                wave.style.top = `${(y1 + y2) / 2 - wave.offsetHeight / 2}px`;
+                wave.style.animation = 'none';
+                // Trigger reflow to restart the animation
+                wave.offsetWidth; 
+                wave.style.animation = 'propagateWave 2s linear forwards';
+            }
+
+            requestAnimationFrame(updatePosition);
+        }
+
+        updatePosition();
+    </script>
+</body>
+</html>
