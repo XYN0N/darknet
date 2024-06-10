@@ -1,0 +1,28 @@
+{
+    "threads": [
+        {
+            "id": "1",
+            "parent": "0",
+            "timestamp": "1682792807",
+            "bumped": "1682792882",
+            "name": "Anonymous",
+            "tripcode": "",
+            "subject": "",
+            "message": "<font size=\"6\" color=\"red\">This is a staff post<\/font>",
+            "file": "1682792807527.jpg",
+            "file_hex": "bee316efd4842b91d6cdddb55b42a21e",
+            "file_original": "1681280359896485.jpg",
+            "file_size": "82691",
+            "file_size_formated": "80.75KB",
+            "image_width": "500",
+            "image_height": "500",
+            "thumb": "1682792807527s.jpg",
+            "thumb_width": "250",
+            "thumb_height": "250",
+            "stickied": "0",
+            "locked": "0",
+            "replies": 2,
+            "images": 1
+        }
+    ]
+}

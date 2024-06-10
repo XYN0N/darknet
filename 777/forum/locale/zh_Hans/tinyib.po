@@ -1,0 +1,867 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: trevor@rocketnine.space\n"
+"POT-Creation-Date: 2021-08-05 11:29-0700\n"
+"PO-Revision-Date: 2022-03-13 15:58+0000\n"
+"Last-Translator: 369322320@qq.com <369322320@qq.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"tinyib/tinyib/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.12-dev\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: imgboard.php\n"
+"X-Poedit-SearchPath-1: inc/functions.php\n"
+"X-Poedit-SearchPath-2: inc/html.php\n"
+
+msgid "Click here to go back"
+msgstr "点击此处返回"
+
+msgid "TINYIB_HCAPTCHA_SITE and TINYIB_HCAPTCHA_SECRET  must be configured."
+msgstr "TINYIB_HCAPTCHA_SITE和TINYIB_HCAPTCHA_SECRET必须被配置。"
+
+msgid "TINYIB_RECAPTCHA_SITE and TINYIB_RECAPTCHA_SECRET  must be configured."
+msgstr "TINYIB_RECAPTCHA_SITE和TINYIB_RECAPTCHA_SECRET必须被配置。"
+
+msgid "TINYIB_TRIPSEED must be configured."
+msgstr "TINYIB_TRIPSEED必须被配置。"
+
+msgid "Unknown database mode specified."
+msgstr "设置了未知的数据库模式。"
+
+#, php-format
+msgid "Directory '%s' can not be written to.  Please modify its permissions."
+msgstr "无法写入目录 '%s'。请修改其权限。"
+
+msgid "Posting is currently disabled.<br>Please try again in a few moments."
+msgstr "现在发帖功能已被禁用。<br>请稍等片刻再重试。"
+
+msgid "Invalid parent thread ID supplied, unable to create post."
+msgstr "提供的上级帖子ID无效，无法创建帖子。"
+
+msgid "Replies are not allowed to locked threads."
+msgstr "不允许回复已锁定的帖子。"
+
+msgid "Your post contains a blocked keyword."
+msgstr "你的贴文包含屏蔽词。"
+
+msgid "Keyword"
+msgstr "关键词"
+
+#, php-format
+msgid "Your IP address (%1$s) is banned until %2$s."
+msgstr "你的IP地址（%1$s）已被封禁直至%2$s。"
+
+#, php-format
+msgid "Your IP address (%s) is permanently banned."
+msgstr "你的IP地址（%s）已被永久封禁。"
+
+msgid "Reason"
+msgstr "原因"
+
+msgid "Embedding a URL and uploading a file at the same time is not supported."
+msgstr "不支持同时嵌入URL和上传文件。"
+
+#, php-format
+msgid "Invalid embed URL. Only %s URLs are supported."
+msgstr "无效的嵌入网址。仅支持 %s URL。"
+
+#, php-format
+msgid "That file is larger than %s."
+msgstr "该文件大于 %s 。"
+
+msgid "Failed to download file at specified URL."
+msgstr "无法下载指定 URL 的文件。"
+
+msgid "Error while processing audio/video."
+msgstr "处理音频/视频时发生错误。"
+
+msgid "Could not create thumbnail."
+msgstr "无法创建缩略图。"
+
+msgid "upload a file or embed a URL"
+msgstr "上传文件或是嵌入链接"
+
+msgid "upload a file"
+msgstr "上传文件"
+
+msgid "embed a URL"
+msgstr "嵌入链接"
+
+#, php-format
+msgid "Please %s to start a new thread."
+msgstr "请%s来创建一个新主题贴。"
+
+#, php-format
+msgid "Please enter a message and/or %s."
+msgstr "请输入信息和/或%s。"
+
+msgid "Please enter a message."
+msgstr "请输入信息。"
+
+#, php-format
+msgid "Please %s."
+msgstr "请%s。"
+
+#, php-format
+msgid "Your %s will be shown <b>once it has been approved</b>."
+msgstr "<b>当审核通过后</b>，你的%s会被显示。"
+
+msgid "Updating thread..."
+msgstr "正在更新主题贴..."
+
+msgid "Updating index..."
+msgstr "正在更新索引..."
+
+msgid "Created staff post"
+msgstr "已创建管理员贴文"
+
+msgid "This post has been deleted"
+msgstr "此贴文已被删除"
+
+msgid "This post requires moderation before it can be displayed"
+msgstr "此贴文需经审核后方可显示"
+
+msgid "Automatic refreshing is disabled."
+msgstr "自动刷新已关闭。"
+
+msgid "Reporting is disabled."
+msgstr "举报被禁用。"
+
+msgid ""
+"Sorry, an invalid post identifier was sent. Please go back, refresh the "
+"page, and try again."
+msgstr "抱歉，贴文ID非法。请返回，刷新页面并重试。"
+
+msgid "Moderators have determined that post does not break any rules."
+msgstr "版主已确定该贴文不违反任何规则。"
+
+msgid "You have already submitted a report for that post."
+msgstr "你已经对此贴文提交过举报了。"
+
+msgid "(enter the text below)"
+msgstr "（在下方输入文字）"
+
+msgid "Please complete a CAPTCHA to submit your report"
+msgstr "请完成验证码以提交你的举报"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Post reported."
+msgstr "已举报贴文。"
+
+msgid "Tick the box next to a post and click \"Delete\" to delete it."
+msgstr "勾选贴文旁边的复选框，然后点击“删除”来删除贴文。"
+
+msgid ""
+"Post deletion is currently disabled.<br>Please try again in a few moments."
+msgstr "删贴目前已禁用。<br>请稍后再试。"
+
+msgid "Post deleted."
+msgstr "已删除贴文。"
+
+msgid "Invalid password."
+msgstr "无效的密码。"
+
+msgid "Rebuilt board."
+msgstr "重建板块。"
+
+msgid "Access denied"
+msgstr "访问被拒绝"
+
+msgid "Account not found."
+msgstr "账户未找到。"
+
+msgid "This account may not be updated while TINYIB_ADMINPASS is set."
+msgstr "设置 TINYIB_ADMINPASS 时，此账户可能不会更新。"
+
+msgid "This account may not be updated while TINYIB_MODPASS is set."
+msgstr "设置 TINYIB_MODPASS 时，此账户可能不会更新。"
+
+msgid "A password is required."
+msgstr "需要密码。"
+
+msgid "Invalid role."
+msgstr "非法角色。"
+
+#, php-format
+msgid "Added account %s"
+msgstr "已添加账户%s"
+
+msgid "Added account"
+msgstr "已添加账户"
+
+#, php-format
+msgid "Renamed account %1$s as %2$s"
+msgstr "已重命名账户%1$s为%2$s"
+
+#, php-format
+msgid "Changed password of account %s"
+msgstr "已为账户%s重置密码"
+
+msgid "Super-administrator"
+msgstr "超级管理员"
+
+msgid "Administrator"
+msgstr "管理员"
+
+msgid "Moderator"
+msgstr "版主"
+
+msgid "Disabled"
+msgstr "已关闭"
+
+#, php-format
+msgid "Changed role of account %s to %s"
+msgstr "已切换账户角色%s为%s"
+
+msgid "Updated account"
+msgstr "已更新账户"
+
+msgid "permanently"
+msgstr "永久的"
+
+#, php-format
+msgid "until %s"
+msgstr "直至%s"
+
+#, php-format
+msgid "Banned %s %s"
+msgstr "已封禁%s%s"
+
+#, php-format
+msgid "Banned %s %s: %s"
+msgstr "已封禁%s%s：%s"
+
+#, php-format
+msgid "Added ban message to %s"
+msgstr "已添加封禁信息至%s"
+
+msgid "Banned 1 IP address"
+msgstr "已封禁IP地址"
+
+#, php-format
+msgid "Banned %d IP addresses"
+msgstr "已封禁%d个IP地址"
+
+#, php-format
+msgid "Lifted ban on %s"
+msgstr "解除对%s的封禁"
+
+msgid "Sorry, that keyword has already been added."
+msgstr "抱歉，此关键词已被添加。"
+
+#, php-format
+msgid "Updated keyword %s"
+msgstr "已更新关键词%s"
+
+msgid "Keyword updated."
+msgstr "已更新关键词。"
+
+msgid "Keyword added."
+msgstr "已添加关键词。"
+
+msgid "That keyword does not exist."
+msgstr "关键词不存在。"
+
+#, php-format
+msgid "Deleted keyword %s"
+msgstr "已删除关键词%s"
+
+msgid "Keyword deleted."
+msgstr "已删除关键词。"
+
+#, php-format
+msgid "Deleted %s"
+msgstr "已删除%s"
+
+msgid "Deleted 1 post"
+msgstr "已删除贴文"
+
+#, php-format
+msgid "Deleted %d posts"
+msgstr "已删除%d篇贴文"
+
+msgid "Approved"
+msgstr "已认可"
+
+#, php-format
+msgid "Post No.%d approved."
+msgstr "贴文No.%d已被批准。"
+
+msgid "Sorry, there doesn't appear to be a post with that ID."
+msgstr "抱歉，似乎没有带该 ID 的贴文。"
+
+msgid "Stickied"
+msgstr "已钉选"
+
+msgid "Unstickied"
+msgstr "解除钉选"
+
+msgid "Form data was lost. Please go back and try again."
+msgstr "表单数据丢失。请返回并重试。"
+
+msgid "Locked"
+msgstr "已锁定"
+
+msgid "Unlocked"
+msgstr "已解锁"
+
+msgid "Passwords do not match."
+msgstr "密码不匹配。"
+
+msgid "Password updated"
+msgstr "密码已更新"
+
+msgid "Please enter the CAPTCHA text."
+msgstr "请输入验证码。"
+
+msgid ""
+"Incorrect CAPTCHA text entered.  Please try again.<br>Click the image to "
+"retrieve a new CAPTCHA."
+msgstr "输入了错误的验证码。请重试。<br>单击图像以获取新的验证码。"
+
+#, php-format
+msgid ""
+"Please shorten your message, or post it in multiple parts. Your message is "
+"%1$d characters long, and the maximum allowed is %2$d."
+msgstr "请缩短您的信息，或分几段发布。 "
+"您的信息长度为%1$d个字符，允许的最大值为%2$d个。"
+
+msgid "Invalid key."
+msgstr "无效的密码。"
+
+msgid "Invalid username or password."
+msgstr "无效的名称或密码。"
+
+#, php-format
+msgid ""
+"The uploaded file exceeds the upload_max_filesize directive (%s) in php.ini."
+msgstr ""
+
+msgid "The uploaded file was only partially uploaded."
+msgstr ""
+
+msgid "No file was uploaded."
+msgstr ""
+
+msgid "Missing a temporary folder."
+msgstr ""
+
+msgid "Failed to write file to disk"
+msgstr ""
+
+msgid "Unable to save the uploaded file."
+msgstr ""
+
+#, php-format
+msgid ""
+"Duplicate file uploaded. That file has already been posted <a href=\"%s"
+"\">here</a>."
+msgstr ""
+
+msgid ""
+"Unable to read the uploaded file while creating its thumbnail. A common "
+"cause for this is an incorrect extension when the file is actually of a "
+"different type."
+msgstr ""
+
+msgid "File transfer failure. Please retry the submission."
+msgstr "文件传输失败。请重试。"
+
+msgid ""
+"Failed to read the MIME type and size of the uploaded file. Please retry the "
+"submission."
+msgstr "无法读取已上传文件的MIME类型和大小。请重试。"
+
+msgid "Could not copy uploaded file."
+msgstr "无法复制已上传的文件。"
+
+msgid "File transfer failure. Please go back and try again."
+msgstr "文件传输失败。请返回并重试。"
+
+msgid "Sorry, your video appears to be corrupt."
+msgstr "抱歉，你上传的视频已经损坏。"
+
+#, php-format
+msgid "Supported file type is %s"
+msgstr ""
+
+#, php-format
+msgid "Supported file types are %1$s and %2$s."
+msgstr ""
+
+msgid "Raw HTML"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid ""
+"Text entered in the Message field will be posted as is with no formatting "
+"applied."
+msgstr ""
+
+msgid "Line-breaks must be specified with \"&lt;br&gt;\"."
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "0 to start a new thread"
+msgstr ""
+
+msgid "CAPTCHA"
+msgstr ""
+
+#, php-format
+msgid "Maximum file size allowed is %s."
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Embed"
+msgstr ""
+
+msgid "(paste a YouTube URL)"
+msgstr ""
+
+msgid "All posts are moderated before being shown."
+msgstr ""
+
+msgid "All posts with a file attached are moderated before being shown."
+msgstr ""
+
+#, php-format
+msgid "Images greater than %s will be thumbnailed."
+msgstr ""
+
+#, php-format
+msgid "Currently %s unique user posts."
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "(for post and file deletion)"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Post truncated. Click Reply to view."
+msgstr ""
+
+msgid "1 post omitted. Click Reply to view."
+msgstr ""
+
+#, php-format
+msgid "%d posts omitted. Click Reply to view."
+msgstr ""
+
+msgid "Catalog"
+msgstr ""
+
+msgid "Manage"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Return"
+msgstr ""
+
+msgid "Posting mode: Reply"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete Post"
+msgstr ""
+
+msgid "Accounts"
+msgstr ""
+
+msgid "Bans"
+msgstr ""
+
+msgid "Keywords"
+msgstr ""
+
+msgid "Migrate Database"
+msgstr ""
+
+msgid "Moderate Post"
+msgstr ""
+
+msgid "Moderation Log"
+msgstr ""
+
+msgid "Rebuild All"
+msgstr ""
+
+msgid "Reports"
+msgstr ""
+
+msgid "Staff Post"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Change Password"
+msgstr ""
+
+msgid "Log Out"
+msgstr ""
+
+msgid "Manage mode"
+msgstr ""
+
+msgid "Log In"
+msgstr ""
+
+msgid "Enter a username and password"
+msgstr ""
+
+msgid "No logs."
+msgstr ""
+
+msgid "Moderation log"
+msgstr ""
+
+msgid "Reported posts"
+msgstr ""
+
+#, php-format
+msgid "%1$d report by %2$s"
+msgstr ""
+
+#, php-format
+msgid "%1$d reports by %2$s"
+msgstr ""
+
+#, php-format
+msgid "%d reports"
+msgstr ""
+
+#, php-format
+msgid "Reported by %s"
+msgstr ""
+
+msgid "Moderate"
+msgstr ""
+
+msgid "There are currently no reported posts."
+msgstr ""
+
+msgid "Add an account"
+msgstr ""
+
+msgid "Update an account"
+msgstr ""
+
+msgid "Leave blank to maintain current password"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Choose a role"
+msgstr ""
+
+msgid "Last active"
+msgstr ""
+
+msgid "Never"
+msgstr ""
+
+msgid "update"
+msgstr ""
+
+msgid "Add a ban"
+msgstr ""
+
+msgid ""
+"Multiple IP addresses may be banned at once by separating each address with "
+"a comma."
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "Expire(sec)"
+msgstr ""
+
+msgid "never"
+msgstr ""
+
+msgid "Optional."
+msgstr ""
+
+msgid "1 hour"
+msgstr ""
+
+msgid "1 day"
+msgstr ""
+
+msgid "2 days"
+msgstr ""
+
+msgid "1 week"
+msgstr ""
+
+msgid "2 weeks"
+msgstr ""
+
+msgid "1 month"
+msgstr ""
+
+msgid "Append a message to the post. Optional."
+msgstr ""
+
+msgid "Set At"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Does not expire"
+msgstr ""
+
+msgid "lift"
+msgstr ""
+
+msgid "Moderate a post"
+msgstr ""
+
+msgid "Post ID"
+msgstr ""
+
+msgid "Tip"
+msgstr ""
+
+msgid ""
+"While browsing the image board, you can easily moderate a post if you are "
+"logged in."
+msgstr ""
+
+msgid ""
+"Tick the box next to a post and click \"Delete\" at the bottom of the page "
+"with a blank password."
+msgstr "勾选贴文旁边的复选框，然后使用空白密码点击页面底部的“删除”。"
+
+#, php-format
+msgid "Moderate %d posts"
+msgstr ""
+
+msgid "Delete all"
+msgstr ""
+
+msgid "Ban all"
+msgstr ""
+
+msgid "1 thread and 1 reply will be deleted."
+msgstr ""
+
+#, php-format
+msgid "1 thread and %d replies will be deleted."
+msgstr ""
+
+#, php-format
+msgid "%d threads and 1 reply will be deleted."
+msgstr ""
+
+#, php-format
+msgid "%1$d threads and %2$d replies will be deleted."
+msgstr ""
+
+msgid "1 IP address will be banned."
+msgstr ""
+
+#, php-format
+msgid "%d IP addresses will be banned."
+msgstr ""
+
+#, php-format
+msgid " A ban record already exists for %s"
+msgstr " %s的封禁记录已存在"
+
+msgid "Only an administrator may ban an IP address."
+msgstr ""
+
+#, php-format
+msgid "IP address: %s"
+msgstr ""
+
+msgid "Thread"
+msgstr ""
+
+msgid "1 reply will be deleted."
+msgstr ""
+
+#, php-format
+msgid "%d replies will be deleted."
+msgstr ""
+
+msgid "Belongs to "
+msgstr ""
+
+msgid "Un-sticky"
+msgstr ""
+
+msgid "Sticky"
+msgstr ""
+
+msgid "Return this thread to a normal state."
+msgstr ""
+
+msgid "Keep this thread at the top of the board."
+msgstr ""
+
+msgid "Unlock"
+msgstr ""
+
+msgid "Lock"
+msgstr ""
+
+msgid "Allow replying to this thread."
+msgstr ""
+
+msgid "Disallow replying to this thread."
+msgstr ""
+
+#, php-format
+msgid "Moderating No.%d"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Delete thread"
+msgstr ""
+
+msgid "Delete reply"
+msgstr ""
+
+msgid "Ban poster"
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "report"
+msgstr ""
+
+msgid "reports"
+msgstr ""
+
+msgid "Sorry, there doesn't appear to be a keyword with that ID."
+msgstr "抱歉，似乎没有带该关键词的帖子。"
+
+msgid "Add"
+msgstr ""
+
+msgid "Hide until approved"
+msgstr ""
+
+msgid "Delete and ban for 1 hour"
+msgstr ""
+
+msgid "Delete and ban for 1 day"
+msgstr ""
+
+msgid "Delete and ban for 2 days"
+msgstr ""
+
+msgid "Delete and ban for 1 week"
+msgstr ""
+
+msgid "Delete and ban for 2 weeks"
+msgstr ""
+
+msgid "Delete and ban for 1 month"
+msgstr ""
+
+msgid "Delete and ban permanently"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "thread"
+msgstr ""
+
+msgid "threads"
+msgstr ""
+
+msgid "ban"
+msgstr ""
+
+msgid "bans"
+msgstr ""
+
+msgid "More Info"
+msgstr ""
+
+msgid "Pending posts"
+msgstr ""
+
+msgid "Recent posts"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+#~ msgid "Sorry, there is already a ban on record for that IP address."
+#~ msgstr "抱歉，此ID已被禁用。"
+
+#~ msgid "%s uploaded."
+#~ msgstr "%s 已上传。"
+
+#~ msgid "Ban record added for %s"
+#~ msgstr "添加了对 %s 的禁令"
+
+#~ msgid "Ban record lifted for %s"
+#~ msgstr "解除了对 %s 的禁令"
+
+#~ msgid "Post No.%d deleted."
+#~ msgstr "帖子 ID%d 已删除。"
+
+#~ msgid "Anonymous"
+#~ msgstr "匿名"
