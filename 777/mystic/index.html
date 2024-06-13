@@ -1,0 +1,269 @@
+<!DOCTYPE html><html><head>
+	<!-- general -->
+	<title>TSUKI</title>
+
+	<!-- meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.7">
+
+	<!-- browser styling (icons, theme, title) -->
+	<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+	<link rel="manifest" href="/html/boards/res/images/icons/manifest.json">
+	<link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#000000">
+	<link rel="shortcut icon" href="favicon.ico">
+	<meta name="apple-mobile-web-app-title" content="TSUKI">
+	<meta name="application-name" content="TSUKI">
+	<meta name="msapplication-config" content="/html/boards/res/images/icons/browserconfig.xml">
+	<meta name="theme-color" content="#000000">
+
+	<!-- CSS links -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="css/cursor.css">
+	<link rel="stylesheet" href="css/scanlines.css">
+
+	<!-- JavaScript -->
+	<script src="js/cookies.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/howler.min.js"></script>
+	<script src="js/sfx-main.js"></script>
+
+	<!-- content tags -->
+	<meta property="og:title" content="TSUKI Project">
+	<meta property="og:description" content="Unlink the world. Unlock the rest.">
+	<meta property="og:image" content="images/tsuki.png">
+
+	<!-- PAGE-SPECIFIC -->
+	<style>
+		body {
+			background-image: url(images/404.jpg);
+			background-size: cover;
+			background-position: bottom;
+		}
+
+	#overlay {
+			position: absolute;
+			bottom: 1;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+
+			background-image: url(images/404-overlay.png);
+		  background-size: cover; 
+			background-position: bottom;
+
+			pointer-events: none;
+		} 
+
+		@keyframes move-twink-back {
+		    from {background-position:0 0;}
+		    to {background-position:-10000px 5000px;}
+		}
+
+		#twinkling_stars {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: block;
+
+			background: #000 url(images/stars.png) repeat top center;
+			z-index: 0;
+
+			mix-blend-mode: lighten;
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+
+			pointer-events: none;
+		}
+
+		#twinkling_stars::after {
+			content: "";
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: block;
+
+			background:transparent url(images/twinkling.png) repeat top center;
+			z-index:1;
+			animation: 200s move-twink-back linear infinite;
+
+			mix-blend-mode: darken;
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+
+			pointer-events: none;
+		}
+
+		#content {
+			color: #EEF;
+			text-shadow: 0px 0px 16px #AAF;
+			opacity: 0.8;
+			mix-blend-mode: lighten;
+			width: 40em;
+			max-width: calc(100%  - 2em);
+			padding-left: 5vw;
+			padding-top: 5vw;
+			position: relative;
+			z-index: 1000;
+		}
+
+		#content h1 {
+			font-family: "Heading", sans-serif;
+			font-size: 5em;
+			letter-spacing: 0.1em;
+		}
+
+		#logo {
+			position: fixed;
+			right: 5vw;
+			top: 5vw;
+			z-index: 100;
+			mix-blend-mode: lighten;
+			width: 7vw;
+			opacity: 0.8;
+		}
+
+		#secondary {
+			opacity: 0.5;
+			margin-top: 0.5em;
+		}
+	</style>
+	<script>
+		$(document).ready(function() {
+			music_volume = 1;
+			sfx_volume = 1;
+			setSfxVolume(1);
+			playMusic(1, "404");
+		});
+	</script>
+</head>
+<body>
+	<div id="twinkling_stars"></div>
+	<div id="overlay"></div>
+	<div id="loading-box" class="finished">
+	<span id="loading-box-text">Loading...</span>
+	<div id="loading-box-icon">
+		<img id="loading-box-icon-tsuki" src="images/loading-box-icon-tsuki.png">
+		<img id="loading-box-icon-spin" src="images/loading-box-icon-spin.png">
+	</div>
+</div>
+
+<style>
+	#loading-box {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #000;
+		z-index: 1000000000;
+		transition: opacity 0.2s;
+	}
+
+	#loading-box.finished {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	#loading-box-text {
+		position: fixed;
+		right: 72px;
+		bottom: 28px;
+		text-align: right;
+		color: #FFF;
+		font-family: "Tiny", sans-serif;
+		font-size: 22px;
+		pointer-events: none;
+		transition: bottom 0.2s ease-in;
+	}
+
+	#loading-box-text::selection {
+		background: none;
+		color: #FFF;
+	}
+	#loading-box-text::-moz-selection {
+		background: none;
+		color: #FFF;
+	}
+
+	#loading-box.finished #loading-box-text {
+		bottom: -36px;
+	}
+
+	#loading-box-icon {
+		position: fixed;
+		width: 50px;
+		height: 50px;
+		right: 14px;
+		bottom: 14px;
+		pointer-events: none;
+		transition: bottom 0.2s ease-in;
+	}
+
+	#loading-box.finished #loading-box-icon {
+		bottom: -50px;
+	}
+
+	#loading-box-icon-tsuki {
+		position: absolute;
+		width: 50px;
+		pointer-events: none;
+	}
+
+	#loading-box-icon-spin {
+		position: absolute;
+		width: 50px;
+		left: 1px;
+		pointer-events: none;
+		animation: LoaderSpin 2s infinite linear;
+	}
+
+	@keyframes LoaderSpin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		document.getElementById("loading-box-icon-spin").src = "/html/boards/res/images/loading-box-icon-finish.png";
+		document.getElementById("loading-box-text").innerHTML = "Loaded.";
+		document.getElementById("loading-box").className = "finished";
+
+		setTimeout(function() {
+			document.getElementById("loading-box-icon-spin").src = "/html/boards/res/images/loading-box-icon-spin.png";
+			document.getElementById("loading-box-text").innerHTML = "Loading...";
+		}, 500);
+	});
+
+	window.onbeforeunload = function() {
+		document.getElementById("loading-box-icon-spin").src = "/html/boards/res/images/loading-box-icon-spin.png";
+		document.getElementById("loading-box-text").innerHTML = "Loading...";
+		document.getElementById("loading-box").classList.remove("finished");
+		fadeAway(200);
+	}
+</script>
+
+<noscript>
+	<style>
+		#loading-box {
+			display: none !important;
+		}
+	</style>
+</noscript>
+	<div id="content">
+	
+	</div>
+
+</body></html>

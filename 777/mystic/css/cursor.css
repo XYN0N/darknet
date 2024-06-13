@@ -1,0 +1,55 @@
+html, body {
+	cursor: url(../images/default.png), default;
+}
+
+a {
+	cursor: url(../images/out.png), pointer;
+}
+
+.cur-confirm {
+	cursor: url(/html/boards/res/images/cursor/confirm.png), pointer;
+}
+.cur-cancel {
+	cursor: url(/html/boards/res/images/cursor/cancel.png), pointer;
+}
+.cur-no, .disabled {
+	cursor: url(/html/boards/res/images/cursor/no.png), pointer;
+}
+
+.cur-action {
+	cursor: url(../images/action.png), pointer;
+}
+.cur-copy {
+	cursor: url(/html/boards/res/cursor/copy.png), pointer;
+}
+
+.cur-open {
+	cursor: url(/html/boards/res/cursor/open.png), pointer;
+}
+.cur-close {
+	cursor: url(/html/boards/res/cursor/close.png), pointer;
+}
+
+.cur-up {
+	cursor: url(/html/boards/res/cursor/up.png), pointer;
+}
+.cur-upup {
+	cursor: url(/html/boards/res/cursor/upup.png), pointer;
+}
+.cur-stay {
+	cursor: url(/html/boards/res/cursor/stay.png), pointer;
+}
+.cur-down {
+	cursor: url(/html/boards/res/cursor/down.png), pointer;
+}
+.cur-downdown {
+	cursor: url(/html/boards/res/cursor/downdown.png), pointer;
+}
+
+.cur-out {
+	cursor: url(../images/out.png), pointer;
+}
+
+.cur-dataverse, .dataverse-link {
+	cursor: url(/html/boards/res/cursor/dataverse.png), pointer;
+}
