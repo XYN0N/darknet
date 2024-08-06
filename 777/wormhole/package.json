@@ -1,0 +1,37 @@
+{
+  "name": "wormhole",
+  "private": true,
+  "version": "2.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirxemic/wormhole.git"
+  },
+  "keywords": [
+    "wormhole",
+    "demo",
+    "webgl",
+    "raytracing"
+  ],
+  "author": "Pim Schreurs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sirxemic/wormhole/issues"
+  },
+  "devDependencies": {
+    "@types/three": "^0.164.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-glsl": "^1.3.0"
+  },
+  "dependencies": {
+    "three": "^0.164.1",
+    "webxr-polyfill": "^2.0.3"
+  }
+}
